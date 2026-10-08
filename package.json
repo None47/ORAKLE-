@@ -1,0 +1,18 @@
+{
+  "name": "oracle-full-integrated",
+  "version": "5.0.0",
+  "description": "Original ORACLE campaign with a deterministic AI recommendation boundary and Vercel serverless API.",
+  "private": true,
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node tests/run.js && node tests/ui.test.js",
+    "test:backend": "node tests/run.js",
+    "test:ui": "node tests/ui.test.js",
+    "build:html": "node scripts/build-html.js",
+    "serve": "node scripts/serve-local.js"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.0"
+  }
+}
+

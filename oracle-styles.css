@@ -1,0 +1,726 @@
+:root{--ox-paper:#f7f8fa;--ox-paper-deep:#eceef2;--ox-ink:#17191f;--ox-muted:#626b78;--ox-faint:#9299a6;--ox-rule:#e2e5eb;--ox-rust:#5b63ee;--ox-rust-soft:#eceeff;--ox-moss:#12806e;--ox-moss-soft:#e0f2ec;--ox-night:#191b38;--ox-night-line:#474e76;--ox-white:#f8f9ff;--ox-alert:#a96518;--ox-alert-soft:#f6e8d1;--ox-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--ox-sans:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--ox-serif:Georgia,"Iowan Old Style","Palatino Linotype",serif}
+body.oracle-experience-mode{min-width:0!important;background:var(--ox-paper)!important;color:var(--ox-ink)!important;letter-spacing:normal!important}
+body.oracle-experience-mode::before,body.oracle-experience-mode::after,body.oracle-experience-mode>.grain{display:none!important}
+body.oracle-experience-mode>#master-map-invariant,body.oracle-experience-mode>#current-campaign-state,body.oracle-experience-mode>#runbar,body.oracle-experience-mode>.nav,body.oracle-experience-mode>.bnav,body.oracle-experience-mode>.wrap{display:none!important}
+#oracle-experience{position:relative;z-index:100001;min-height:100vh;background:var(--ox-paper);color:var(--ox-ink);font:400 15px/1.55 var(--ox-sans);letter-spacing:-.012em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-feature-settings:"ss01","cv01"}
+#oracle-experience[hidden]{display:none}
+#oracle-experience *{box-sizing:border-box}
+#oracle-experience button,#oracle-return-to-experience{font-family:var(--ox-mono);cursor:pointer}
+#oracle-experience button:focus-visible,#oracle-experience a:focus-visible,#oracle-experience input:focus-visible,#oracle-experience textarea:focus-visible,#oracle-return-to-experience:focus-visible{outline:3px solid var(--ox-rust);outline-offset:3px}
+#oracle-experience button:disabled{opacity:.52;cursor:progress}
+#oracle-experience .ox-shell{max-width:1480px;margin:0 auto;padding:0 clamp(22px,5.1vw,76px)}
+#oracle-experience .ox-topbar{height:76px;display:flex;align-items:center;gap:24px;border-bottom:1px solid var(--ox-ink);position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--ox-paper) 94%,transparent);backdrop-filter:blur(10px)}
+#oracle-experience .ox-wordmark{display:flex;align-items:center;gap:10px;color:var(--ox-ink);text-decoration:none;font:750 13px/1 var(--ox-mono);letter-spacing:.08em;white-space:nowrap}
+#oracle-experience .ox-sigil{color:var(--ox-rust);font-size:22px;line-height:1}
+#oracle-experience .ox-wordmark i{font:500 9px/1.3 var(--ox-mono);letter-spacing:.1em;color:var(--ox-muted);margin-left:5px}
+#oracle-experience .ox-topmeta{margin-left:auto;display:flex;align-items:center;gap:9px;color:var(--ox-muted);font:500 9px/1.4 var(--ox-mono);letter-spacing:.09em;white-space:nowrap}
+#oracle-experience .ox-live-dot{width:7px;height:7px;border-radius:50%;background:var(--ox-moss);box-shadow:0 0 0 3px var(--ox-moss-soft);animation:ox-live-signal 3.2s ease-in-out infinite}
+#oracle-experience .ox-top-sep{color:var(--ox-rule)}
+#oracle-experience .ox-original-link{border:1px solid var(--ox-rule);background:transparent;color:var(--ox-ink);padding:10px 12px;font-size:9px;letter-spacing:.07em;white-space:nowrap}
+#oracle-experience .ox-original-link span,#oracle-experience .ox-primary span,#oracle-experience .ox-inline-link span{color:var(--ox-rust);margin-left:8px}
+#oracle-experience .ox-nav{display:flex;align-items:center;gap:clamp(16px,3vw,42px);height:55px;border-bottom:1px solid var(--ox-rule);position:sticky;top:76px;z-index:9;background:color-mix(in srgb,var(--ox-paper) 96%,transparent);overflow-x:auto;scrollbar-width:none}
+#oracle-experience .ox-nav::-webkit-scrollbar{display:none}
+#oracle-experience .ox-nav button{position:relative;flex:none;height:100%;border:0;background:none;padding:0 2px;color:var(--ox-muted);font-size:9px;font-weight:650;letter-spacing:.09em;transition:color .22s ease}
+#oracle-experience .ox-nav button span{font-size:8px;color:var(--ox-faint);margin-right:7px}
+#oracle-experience .ox-nav button[aria-current="page"]{color:var(--ox-rust)}
+#oracle-experience .ox-nav button[aria-current="page"]::after{content:"";position:absolute;height:2px;bottom:-1px;left:0;right:0;background:var(--ox-rust);transform:scaleX(1);transform-origin:left;animation:ox-nav-mark .32s cubic-bezier(.2,.75,.25,1) both}
+#oracle-experience .ox-view{padding-bottom:26px;animation:ox-arrive .42s cubic-bezier(.18,.7,.25,1) both}
+#oracle-experience .ox-view[hidden]{display:none}
+@keyframes ox-arrive{from{opacity:0;transform:translateY(11px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ox-nav-mark{from{transform:scaleX(.18)}to{transform:scaleX(1)}}
+@keyframes ox-live-signal{0%,100%{box-shadow:0 0 0 3px var(--ox-moss-soft)}50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--ox-moss-soft) 48%,transparent)}}
+@keyframes ox-rise-in{from{opacity:0;transform:translateY(25px);filter:blur(3px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes ox-rail-in{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes ox-state-tick{0%{transform:translateY(5px);color:var(--ox-rust)}100%{transform:translateY(0)}}
+@keyframes ox-dial-acquire{0%{opacity:.08;transform:rotate(-125deg)}65%{opacity:.72}100%{opacity:.42;transform:rotate(0)}}
+@keyframes ox-marker-wave{0%{opacity:0;transform:scale(.45)}28%{opacity:.65}100%{opacity:0;transform:scale(1.9)}}
+@keyframes ox-signal-travel{0%{top:-30%;opacity:0}12%{opacity:1}78%{opacity:.9}100%{top:105%;opacity:0}}
+#oracle-experience .ox-eyebrow{display:flex;align-items:center;gap:14px;margin-top:29px;color:var(--ox-muted);font:600 9px/1.4 var(--ox-mono);letter-spacing:.14em}
+#oracle-experience .ox-rule{height:1px;background:var(--ox-rule);flex:1;min-width:18px}
+#oracle-experience .ox-hero{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(230px,.55fr);align-items:end;padding:clamp(32px,5.3vw,78px) 0 48px;border-bottom:1px solid var(--ox-ink);gap:48px}
+#oracle-experience .ox-dayline{display:flex;align-items:flex-end;gap:15px;position:relative;isolation:isolate;min-height:clamp(225px,25vw,320px);color:var(--ox-rust);font-family:var(--ox-serif);font-variant-numeric:oldstyle-nums;line-height:.76}
+#oracle-experience .ox-day-dial{position:absolute;z-index:-1;left:clamp(-52px,-4vw,-16px);top:50%;width:clamp(250px,30vw,370px);height:auto;overflow:visible;pointer-events:none;transform:translateY(-50%)}
+#oracle-experience .ox-dial-core{fill:url(#ox-dial-core)}
+#oracle-experience .ox-dial-track{fill:none;stroke:var(--ox-rust);stroke-width:1;opacity:.16}
+#oracle-experience .ox-dial-tick{stroke:var(--ox-ink);stroke-width:1;opacity:.15}
+#oracle-experience .ox-dial-tick-major{stroke-width:1.35;opacity:.32}
+#oracle-experience .ox-dial-progress{fill:none;stroke:url(#ox-dial-gradient);stroke-width:2.5;stroke-linecap:round;transform:rotate(-90deg);transform-origin:180px 180px;transition:stroke-dashoffset 1.3s cubic-bezier(.18,.72,.2,1)}
+#oracle-experience .ox-dial-orbit{fill:none;stroke:var(--ox-moss);stroke-width:1;stroke-dasharray:1 9;opacity:.42;transform-box:view-box;transform-origin:center;animation:ox-dial-acquire 1.7s .16s cubic-bezier(.15,.72,.22,1) both}
+#oracle-experience .ox-dial-marker-halo{fill:var(--ox-moss);opacity:0;transform-box:fill-box;transform-origin:center;animation:ox-marker-wave 1.6s 1.05s ease-out 2}
+#oracle-experience .ox-dial-marker{fill:var(--ox-moss);stroke:var(--ox-paper);stroke-width:2;filter:drop-shadow(0 0 5px color-mix(in srgb,var(--ox-moss) 65%,transparent));transition:cx .9s cubic-bezier(.18,.72,.2,1),cy .9s cubic-bezier(.18,.72,.2,1)}
+#oracle-experience .ox-day-num,#oracle-experience .ox-day-total{position:relative;z-index:1}
+#oracle-experience .ox-day-num{font-size:clamp(112px,18vw,246px);letter-spacing:-.095em;animation:ox-rise-in .82s cubic-bezier(.16,.75,.22,1) both}
+#oracle-experience .ox-day-total{padding-bottom:11px;color:var(--ox-muted);font:500 13px/1.1 var(--ox-mono);letter-spacing:-.04em}
+#oracle-experience .ox-day-total b{font-size:20px;font-weight:550;color:var(--ox-ink)}
+#oracle-experience .ox-day-total small{display:block;margin-top:9px;font-size:8px;letter-spacing:.1em;line-height:1.45}
+#oracle-experience .ox-phase-label,#oracle-experience .ox-label{font:650 9px/1.4 var(--ox-mono);letter-spacing:.15em;color:var(--ox-muted)}
+#oracle-experience .ox-phase-label{margin:25px 0 7px;animation:ox-rise-in .5s .14s ease both}
+#oracle-experience .ox-hero h1{font:500 clamp(52px,8vw,112px)/.95 var(--ox-serif);letter-spacing:-.066em;margin:0;color:var(--ox-ink);max-width:790px;overflow-wrap:anywhere;animation:ox-rise-in .65s .22s cubic-bezier(.16,.75,.22,1) both}
+#oracle-experience .ox-campaign-name{font:italic 19px/1.35 var(--ox-serif);color:var(--ox-muted);margin:18px 0 0;animation:ox-rise-in .55s .34s ease both}
+#oracle-experience .ox-hero-aside{border-left:1px solid var(--ox-rule);padding:12px 0 0 23px;margin-bottom:6px;animation:ox-rise-in .65s .25s ease both}
+#oracle-experience .ox-position-title{font:500 clamp(24px,3vw,39px)/1.07 var(--ox-serif);letter-spacing:-.035em;margin:12px 0 8px;overflow-wrap:anywhere}
+#oracle-experience .ox-position-detail{color:var(--ox-muted);font-size:12px;line-height:1.55;margin:0}
+#oracle-experience .ox-gate-line{border-top:1px solid var(--ox-rule);margin-top:28px;padding-top:12px;display:flex;flex-direction:column;gap:4px}
+#oracle-experience .ox-gate-line b{font:500 12px/1.4 var(--ox-mono);color:var(--ox-ink)}
+#oracle-experience .ox-now-grid{display:grid;grid-template-columns:minmax(220px,.64fr) minmax(0,1.36fr);gap:clamp(30px,6vw,86px);padding:47px 0 42px;border-bottom:1px solid var(--ox-rule);animation:ox-rise-in .68s .38s ease both}
+#oracle-experience .ox-section-index{display:flex;gap:12px;align-items:center;color:var(--ox-muted);font:600 9px/1.4 var(--ox-mono);letter-spacing:.14em}
+#oracle-experience .ox-section-index>span:first-child{color:var(--ox-rust)}
+#oracle-experience .ox-bottleneck h2{font:500 clamp(25px,3vw,39px)/1.15 var(--ox-serif);letter-spacing:-.035em;margin:23px 0 11px;overflow-wrap:anywhere}
+#oracle-experience .ox-source-note{font-size:11px;color:var(--ox-muted);line-height:1.55;max-width:34em;margin:0}
+#oracle-experience .ox-move{background:var(--ox-night);color:var(--ox-white);padding:clamp(22px,3.2vw,42px);position:relative;isolation:isolate}
+#oracle-experience .ox-move::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ox-rust);z-index:-1;transform-origin:top;animation:ox-rail-in .7s .55s cubic-bezier(.15,.8,.2,1) both}
+#oracle-experience .ox-move::after{content:"";position:absolute;z-index:1;left:-1px;top:-30%;width:5px;height:28%;pointer-events:none;opacity:0;background:linear-gradient(180deg,transparent,#b7c3ff 35%,#ecfaff 52%,#5e7cdb 75%,transparent);filter:drop-shadow(0 0 5px #9caeff);animation:ox-signal-travel 2s .95s cubic-bezier(.2,.65,.25,1) both}
+#oracle-experience .ox-move-head{display:flex;align-items:center;justify-content:space-between;gap:14px}
+#oracle-experience .ox-move .ox-section-index{color:#bdc3b9}
+#oracle-experience .ox-source-tag{padding:5px 7px;border:1px solid var(--ox-night-line);font:550 8px/1.3 var(--ox-mono);letter-spacing:.1em;color:#c3ccb9;white-space:nowrap}
+#oracle-experience .ox-move h2{font:500 clamp(26px,3.5vw,43px)/1.13 var(--ox-serif);letter-spacing:-.035em;margin:23px 0 5px;max-width:23ch;overflow-wrap:anywhere}
+#oracle-experience .ox-task-state{margin:0;color:#c5cfbf;font:500 9px/1.5 var(--ox-mono);letter-spacing:.07em;overflow-wrap:anywhere}
+#oracle-experience .ox-move-facts{margin:25px 0 0;border-top:1px solid var(--ox-night-line)}
+#oracle-experience .ox-move-facts>div{display:grid;grid-template-columns:112px minmax(0,1fr);gap:18px;border-bottom:1px solid var(--ox-night-line);padding:12px 0}
+#oracle-experience .ox-move-facts dt{font:600 8px/1.5 var(--ox-mono);letter-spacing:.12em;color:#b6bcb0}
+#oracle-experience .ox-move-facts dd{font-size:11px;line-height:1.55;color:var(--ox-white);margin:0;overflow-wrap:anywhere;white-space:pre-wrap}
+#oracle-experience .ox-updated{animation:ox-state-tick .65s cubic-bezier(.2,.7,.25,1) both}
+#oracle-experience .ox-move-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px 20px;margin-top:22px}
+#oracle-experience .ox-primary{min-height:42px;border:1px solid var(--ox-rust);background:var(--ox-rust);color:#fff8ee;padding:0 14px;font-size:9px;font-weight:700;letter-spacing:.06em;text-align:left}
+#oracle-experience .ox-primary span{color:#f3c5ae}
+#oracle-experience .ox-text-button{border:0;background:transparent;color:var(--ox-muted);padding:9px 0;font-size:8px;letter-spacing:.08em;text-align:left}
+#oracle-experience .ox-move .ox-text-button{color:#cad0c5}
+#oracle-experience .ox-bottomline{display:grid;grid-template-columns:1fr 1fr 1fr auto;align-items:center;gap:22px;padding:20px 0 27px;border-bottom:1px solid var(--ox-ink)}
+#oracle-experience .ox-bottomstat{display:flex;flex-direction:column;gap:5px}
+#oracle-experience .ox-bottomstat span{font:600 8px/1.4 var(--ox-mono);letter-spacing:.12em;color:var(--ox-muted)}
+#oracle-experience .ox-bottomstat b{font:500 15px/1.3 var(--ox-serif);font-variant-numeric:tabular-nums}
+#oracle-experience .ox-inline-link{justify-self:end;border:0;background:none;color:var(--ox-ink);font-size:8px;font-weight:700;letter-spacing:.09em;white-space:nowrap;padding:10px 0}
+#oracle-experience .ox-footer{display:flex;align-items:center;gap:22px;min-height:58px;color:var(--ox-muted);font:550 8px/1.4 var(--ox-mono);letter-spacing:.1em}
+#oracle-experience .ox-footer>span:first-child{color:var(--ox-ink)}
+#oracle-experience .ox-footer>span:nth-child(2){margin-right:auto}
+#oracle-experience .ox-footer button{border:0;background:none;color:var(--ox-rust);font-size:8px;font-weight:700;letter-spacing:.08em;padding:8px 0}
+#oracle-experience .ox-page-heading{padding:clamp(48px,7vw,94px) 0 37px;max-width:880px}
+#oracle-experience .ox-page-heading h1{font:500 clamp(43px,7vw,88px)/.98 var(--ox-serif);letter-spacing:-.06em;margin:13px 0 14px;overflow-wrap:anywhere}
+#oracle-experience .ox-page-heading>p:last-child{font-size:14px;color:var(--ox-muted);max-width:54ch;margin:0}
+#oracle-experience .ox-runway{margin:4px 0 53px;padding:0 2px}
+#oracle-experience .ox-runway-bar{height:2px;background:var(--ox-paper-deep);position:relative}
+#oracle-experience .ox-runway-bar span{display:block;height:100%;background:var(--ox-rust);transition:width .5s ease}
+#oracle-experience .ox-runway-points{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:-6px}
+#oracle-experience .ox-runway-points>div{display:flex;flex-direction:column;align-items:flex-start;gap:6px;position:relative}
+#oracle-experience .ox-runway-points>div:nth-child(2){align-items:center}
+#oracle-experience .ox-runway-points>div:nth-child(3){align-items:flex-end}
+#oracle-experience .ox-point{width:12px;height:12px;border:2px solid var(--ox-rust);background:var(--ox-paper);border-radius:50%}
+#oracle-experience .ox-current-point .ox-point{background:var(--ox-rust);box-shadow:0 0 0 5px var(--ox-rust-soft)}
+#oracle-experience .ox-point-open{border-color:var(--ox-faint)}
+#oracle-experience .ox-runway-points small{font:600 8px/1.4 var(--ox-mono);letter-spacing:.12em;color:var(--ox-muted)}
+#oracle-experience .ox-runway-points b{font:500 12px/1.4 var(--ox-mono);font-variant-numeric:tabular-nums}
+#oracle-experience .ox-campaign-columns{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--ox-ink);border-bottom:1px solid var(--ox-rule)}
+#oracle-experience .ox-campaign-columns article{padding:27px 32px 32px 0;min-height:230px}
+#oracle-experience .ox-campaign-columns article+article{border-left:1px solid var(--ox-rule);padding-left:32px;padding-right:0}
+#oracle-experience .ox-campaign-columns h2{font:500 clamp(25px,3vw,38px)/1.12 var(--ox-serif);letter-spacing:-.035em;margin:15px 0 8px;overflow-wrap:anywhere}
+#oracle-experience .ox-campaign-columns p{font-size:12px;color:var(--ox-muted);margin:0}
+#oracle-experience .ox-large-metric{display:flex;align-items:flex-end;gap:12px;margin-top:28px}
+#oracle-experience .ox-large-metric strong{font:500 58px/.9 var(--ox-serif);letter-spacing:-.05em;color:var(--ox-rust)}
+#oracle-experience .ox-large-metric span{font:600 8px/1.35 var(--ox-mono);letter-spacing:.12em;color:var(--ox-muted);padding-bottom:3px}
+#oracle-experience .ox-small-label{font:600 8px/1.4 var(--ox-mono)!important;letter-spacing:.12em;margin-top:25px!important}
+#oracle-experience .ox-campaign-next>b{display:block;font:500 20px/1.3 var(--ox-serif);margin-top:6px;overflow-wrap:anywhere}
+#oracle-experience .ox-campaign-next .ox-source-note{margin-top:18px;font-size:10px}
+#oracle-experience .ox-lock-note{margin-top:21px;padding:12px 15px;border-left:3px solid var(--ox-moss);background:var(--ox-moss-soft);color:#344537;font:600 10px/1.55 var(--ox-mono);letter-spacing:.025em}
+#oracle-experience .ox-lock-note.is-locked{border-color:var(--ox-alert);background:var(--ox-alert-soft);color:#704619}
+#oracle-experience .ox-mission-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(240px,.55fr);border-top:1px solid var(--ox-ink);border-bottom:1px solid var(--ox-rule)}
+#oracle-experience .ox-mission-primary{padding:31px 38px 36px 0}
+#oracle-experience .ox-mission-primary h2{font:500 clamp(29px,4vw,54px)/1.08 var(--ox-serif);letter-spacing:-.045em;margin:20px 0 11px;max-width:22ch;overflow-wrap:anywhere}
+#oracle-experience .ox-mission-primary>p{font:550 9px/1.5 var(--ox-mono);color:var(--ox-moss);letter-spacing:.08em}
+#oracle-experience .ox-task-truth{margin-top:35px;padding-top:12px;border-top:1px solid var(--ox-rule);display:flex;flex-direction:column;gap:6px}
+#oracle-experience .ox-task-truth span{font:600 8px/1.4 var(--ox-mono);letter-spacing:.12em;color:var(--ox-muted)}
+#oracle-experience .ox-task-truth code{font:500 10px/1.5 var(--ox-mono);overflow-wrap:anywhere}
+#oracle-experience .ox-mission-aside{padding:31px 0 30px 27px;border-left:1px solid var(--ox-rule)}
+#oracle-experience .ox-mission-aside h3{font:500 22px/1.2 var(--ox-serif);margin:13px 0;overflow-wrap:anywhere}
+#oracle-experience .ox-next-task{font-size:10px;color:var(--ox-muted);padding:9px 0;border-top:1px solid var(--ox-rule);overflow-wrap:anywhere}
+#oracle-experience .ox-primary-small{margin-top:14px;font-size:8px}
+#oracle-experience .ox-caveat{font-size:10px;color:var(--ox-muted);line-height:1.6;margin:16px 0}
+#oracle-experience .ox-proof-ledger{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--ox-ink);border-bottom:1px solid var(--ox-rule)}
+#oracle-experience .ox-proof-ledger>section{padding:25px 24px 30px 0;min-width:0}
+#oracle-experience .ox-proof-ledger>section+section{border-left:1px solid var(--ox-rule);padding-left:24px}
+#oracle-experience .ox-label-verified{color:var(--ox-moss)!important}
+#oracle-experience .ox-label-claimed{color:var(--ox-rust)!important}
+#oracle-experience .ox-ledger-list{font:400 11px/1.6 var(--ox-sans);color:var(--ox-muted);margin-top:15px;overflow-wrap:anywhere}
+#oracle-experience .ox-ledger-row{padding:11px 0;border-top:1px solid var(--ox-rule);display:flex;flex-direction:column;gap:4px}
+#oracle-experience .ox-ledger-row strong{color:var(--ox-ink);font:500 15px/1.3 var(--ox-serif)}
+#oracle-experience .ox-ledger-row small{font:550 8px/1.5 var(--ox-mono);letter-spacing:.06em}
+#oracle-experience .ox-unknown-note{font-size:11px;line-height:1.6;color:var(--ox-muted);margin-top:14px}
+#oracle-experience .ox-intel-state{display:grid;grid-template-columns:220px 1fr;border-top:1px solid var(--ox-ink);border-bottom:1px solid var(--ox-rule)}
+#oracle-experience .ox-intel-stamp{padding:25px 24px 27px 0;display:flex;flex-direction:column;align-items:flex-start;gap:9px}
+#oracle-experience .ox-intel-stamp strong{font:650 12px/1.4 var(--ox-mono);color:var(--ox-rust);letter-spacing:.08em}
+#oracle-experience .ox-intel-stamp small{font:550 8px/1.4 var(--ox-mono);color:var(--ox-muted);letter-spacing:.08em}
+#oracle-experience .ox-intel-copy{border-left:1px solid var(--ox-rule);padding:25px 0 27px 28px}
+#oracle-experience .ox-intel-copy h2{font:500 33px/1.1 var(--ox-serif);margin:11px 0}
+#oracle-experience .ox-intel-copy>p:last-child{font-size:11px;color:var(--ox-muted);margin:0;max-width:62ch}
+#oracle-experience .ox-signal-list{padding:16px 0;color:var(--ox-muted);font-size:11px}
+#oracle-experience .ox-signal{padding:15px 0;border-bottom:1px solid var(--ox-rule)}
+#oracle-experience .ox-signal h2{font:500 20px/1.25 var(--ox-serif);color:var(--ox-ink);margin:0 0 4px}
+#oracle-experience .ox-signal p{margin:0;overflow-wrap:anywhere}
+#oracle-experience .ox-decision-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);gap:30px;align-items:start}
+#oracle-experience .ox-ask{padding:22px 24px 24px;background:#e7e3d8;border-top:2px solid var(--ox-rust)}
+#oracle-experience .ox-ask label,#oracle-experience .ox-token label{display:block;font:650 8px/1.4 var(--ox-mono);letter-spacing:.12em;color:var(--ox-muted);margin-bottom:8px}
+#oracle-experience .ox-ask textarea,#oracle-experience .ox-token input{display:block;width:100%;border:1px solid var(--ox-rule);border-radius:0;background:var(--ox-paper);color:var(--ox-ink);padding:11px 12px;font:400 13px/1.5 var(--ox-sans);resize:vertical}
+#oracle-experience .ox-ask-controls{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:12px}
+#oracle-experience .ox-ask-controls>span,#oracle-experience .ox-token small{font-size:9px;color:var(--ox-muted);line-height:1.45}
+#oracle-experience .ox-token{border-left:1px solid var(--ox-rule);padding:2px 0 4px 22px}
+#oracle-experience .ox-token>p:nth-child(2){font-size:10px;color:var(--ox-muted);line-height:1.55;margin:10px 0 18px;max-width:35ch}
+#oracle-experience .ox-token-row{display:flex;gap:6px}
+#oracle-experience .ox-token-row button{border:1px solid var(--ox-ink);background:var(--ox-ink);color:var(--ox-white);font-size:8px;letter-spacing:.08em;padding:0 11px}
+#oracle-experience .ox-token small{display:block;margin-top:7px}
+#oracle-experience .ox-audit-head{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:1px solid var(--ox-ink);margin-top:49px;padding-bottom:11px}
+#oracle-experience .ox-audit-head h2{font:500 25px/1.2 var(--ox-serif);margin:7px 0 0}
+#oracle-experience .ox-audit-list{min-height:48px}
+#oracle-experience .ox-audit-row{display:grid;grid-template-columns:180px minmax(0,1fr) 170px;gap:20px;padding:13px 0;border-bottom:1px solid var(--ox-rule);align-items:start}
+#oracle-experience .ox-audit-meta{display:flex;flex-direction:column;gap:4px}
+#oracle-experience .ox-audit-meta b{font:650 9px/1.4 var(--ox-mono);color:var(--ox-rust);letter-spacing:.09em}
+#oracle-experience .ox-audit-meta time,#oracle-experience .ox-audit-row small{font:500 8px/1.4 var(--ox-mono);color:var(--ox-muted)}
+#oracle-experience .ox-audit-row p{font-size:11px;margin:0;overflow-wrap:anywhere}
+#oracle-experience .ox-decision-output{margin-top:17px;border-top:1px solid #546253;padding-top:13px;overflow-wrap:anywhere}
+#oracle-experience .ox-decision-output[hidden]{display:none}
+#oracle-experience .ox-verdict{font:700 9px/1.4 var(--ox-mono);letter-spacing:.1em;color:#c5cfbf}
+#oracle-experience .ox-verdict-accept{color:#a8d8ad}#oracle-experience .ox-verdict-modify{color:#e4c681!important}#oracle-experience .ox-verdict-reject{color:#ed9c8a!important}#oracle-experience .ox-verdict-need_info{color:#e5c183!important}
+#oracle-experience .ox-decision-output h3{font:500 20px/1.25 var(--ox-serif);margin:9px 0}
+#oracle-experience .ox-verdict-detail{display:grid;grid-template-columns:105px minmax(0,1fr);gap:12px;margin:7px 0;font-size:10px;line-height:1.5;color:var(--ox-white)}
+#oracle-experience .ox-verdict-detail strong{font:600 8px/1.5 var(--ox-mono);color:#bdc3b9;letter-spacing:.08em}
+#oracle-experience .ox-decision-output details{margin-top:12px;border-top:1px solid var(--ox-night-line);padding-top:9px;color:#d2d6cd;font:550 8px/1.5 var(--ox-mono)}
+#oracle-experience .ox-decision-output summary{cursor:pointer;letter-spacing:.08em}
+#oracle-experience .ox-decision-output pre{max-height:240px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;color:#c4d4b9;font:9px/1.5 var(--ox-mono)}
+#oracle-experience .ox-apply{border:1px solid var(--ox-moss);background:var(--ox-moss);color:#fff;padding:10px 12px;margin-top:12px;font:650 8px/1.4 var(--ox-mono);letter-spacing:.08em}
+#oracle-return-to-experience{position:fixed;z-index:100000;right:18px;bottom:16px;border:1px solid #ba5638;background:#f1eee5;color:#22251f;padding:12px 15px;font-size:9px;font-weight:700;letter-spacing:.1em;box-shadow:0 7px 24px #0004}
+#oracle-return-to-experience[hidden]{display:none}
+@media(max-width:860px){
+  #oracle-experience .ox-shell{padding-left:25px;padding-right:25px}
+  #oracle-experience .ox-hero{gap:28px;grid-template-columns:minmax(0,1.2fr) minmax(200px,.8fr)}
+  #oracle-experience .ox-now-grid{grid-template-columns:minmax(180px,.55fr) minmax(0,1.45fr);gap:30px}
+  #oracle-experience .ox-bottomline{grid-template-columns:repeat(3,1fr)}
+  #oracle-experience .ox-inline-link{grid-column:1/-1;justify-self:start}
+  #oracle-experience .ox-audit-row{grid-template-columns:140px minmax(0,1fr)}
+  #oracle-experience .ox-audit-row small{grid-column:2}
+}
+@media(max-width:620px){
+  #oracle-experience .ox-shell{padding:0 18px}
+  #oracle-experience .ox-topbar{height:64px;gap:9px}
+  #oracle-experience .ox-wordmark{gap:6px;font-size:11px}
+  #oracle-experience .ox-wordmark i{display:none}
+  #oracle-experience .ox-sigil{font-size:19px}
+  #oracle-experience .ox-topmeta{font-size:7px;gap:6px;letter-spacing:.025em}
+  #oracle-experience .ox-original-link{font-size:0;padding:9px 10px}
+  #oracle-experience .ox-original-link span{font-size:13px;margin:0}
+  #oracle-experience .ox-nav{top:64px;height:49px;gap:21px;margin-right:-18px;padding-right:18px}
+  #oracle-experience .ox-nav button{font-size:8px}
+  #oracle-experience .ox-nav button span{display:none}
+  #oracle-experience .ox-eyebrow{margin-top:23px;font-size:7px;gap:8px;letter-spacing:.08em}
+  #oracle-experience .ox-hero{display:block;padding:34px 0 27px}
+  #oracle-experience .ox-dayline{min-height:202px}
+  #oracle-experience .ox-day-dial{left:-20px;top:43%;width:232px}
+  #oracle-experience .ox-day-num{font-size:clamp(124px,40vw,168px)}
+  #oracle-experience .ox-day-total{padding-bottom:8px}
+  #oracle-experience .ox-phase-label{margin-top:23px}
+  #oracle-experience .ox-hero h1{font-size:clamp(59px,17vw,82px)}
+  #oracle-experience .ox-campaign-name{font-size:16px;margin-top:11px}
+  #oracle-experience .ox-hero-aside{margin-top:32px;padding:16px 0 0;border-left:0;border-top:1px solid var(--ox-rule)}
+  #oracle-experience .ox-position-title{font-size:27px;margin-top:9px}
+  #oracle-experience .ox-gate-line{margin-top:19px}
+  #oracle-experience .ox-now-grid{display:block;padding:29px 0 29px}
+  #oracle-experience .ox-bottleneck{padding-bottom:26px}
+  #oracle-experience .ox-bottleneck h2{font-size:27px;margin:17px 0 8px}
+  #oracle-experience .ox-move{padding:21px 18px}
+  #oracle-experience .ox-move h2{font-size:29px;margin-top:18px}
+  #oracle-experience .ox-move-facts>div{grid-template-columns:82px minmax(0,1fr);gap:10px;padding:10px 0}
+  #oracle-experience .ox-move-actions{align-items:stretch;flex-direction:column;gap:8px}
+  #oracle-experience .ox-primary{min-height:44px}
+  #oracle-experience .ox-bottomline{grid-template-columns:1fr 1fr;gap:16px;padding:17px 0 21px}
+  #oracle-experience .ox-inline-link{grid-column:1/-1}
+  #oracle-experience .ox-footer{align-items:flex-start;flex-direction:column;gap:5px;padding:15px 0 20px}
+  #oracle-experience .ox-footer>span:nth-child(2){margin:0}
+  #oracle-experience .ox-page-heading{padding:51px 0 29px}
+  #oracle-experience .ox-page-heading h1{font-size:clamp(42px,13vw,62px)}
+  #oracle-experience .ox-page-heading>p:last-child{font-size:12px}
+  #oracle-experience .ox-runway{margin-bottom:39px}
+  #oracle-experience .ox-runway-points b{font-size:9px}
+  #oracle-experience .ox-runway-points small{font-size:7px}
+  #oracle-experience .ox-campaign-columns{grid-template-columns:1fr}
+  #oracle-experience .ox-campaign-columns article{padding:22px 0;min-height:0}
+  #oracle-experience .ox-campaign-columns article+article{border-left:0;border-top:1px solid var(--ox-rule);padding:22px 0}
+  #oracle-experience .ox-mission-layout{grid-template-columns:1fr}
+  #oracle-experience .ox-mission-primary{padding:24px 0}
+  #oracle-experience .ox-mission-aside{border-left:0;border-top:1px solid var(--ox-rule);padding:22px 0}
+  #oracle-experience .ox-proof-ledger{grid-template-columns:1fr}
+  #oracle-experience .ox-proof-ledger>section{padding:19px 0}
+  #oracle-experience .ox-proof-ledger>section+section{border-left:0;border-top:1px solid var(--ox-rule);padding-left:0}
+  #oracle-experience .ox-intel-state{grid-template-columns:1fr}
+  #oracle-experience .ox-intel-stamp{padding:20px 0;border-bottom:1px solid var(--ox-rule)}
+  #oracle-experience .ox-intel-copy{border:0;padding:20px 0}
+  #oracle-experience .ox-decision-layout{grid-template-columns:1fr;gap:24px}
+  #oracle-experience .ox-ask{padding:18px 15px}
+  #oracle-experience .ox-ask-controls{align-items:flex-start;flex-direction:column}
+  #oracle-experience .ox-token{padding:0;border-left:0;border-top:1px solid var(--ox-rule);padding-top:18px}
+  #oracle-experience .ox-audit-head{margin-top:36px;align-items:flex-start}
+  #oracle-experience .ox-audit-row{grid-template-columns:1fr;gap:5px}
+  #oracle-experience .ox-audit-row small{grid-column:auto}
+  #oracle-experience .ox-verdict-detail{grid-template-columns:82px minmax(0,1fr);gap:8px}
+  #oracle-return-to-experience{right:10px;bottom:10px;padding:11px 12px;font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){#oracle-experience *,#oracle-return-to-experience{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+#oracle-experience .ox-hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(330px,.92fr);align-items:center;gap:clamp(30px,5.2vw,78px);text-align:left;padding:34px 0 38px;overflow:visible}
+#oracle-experience .ox-hero::before{left:30%;top:12%;width:min(880px,78%);height:460px}
+#oracle-experience .ox-hero::after{left:83%;top:50%;width:min(700px,64%);height:400px}
+#oracle-experience .ox-hero-left{position:relative;z-index:1;max-width:680px;margin:0}
+#oracle-experience .ox-dayline{width:174px;min-height:150px;justify-content:center;margin:0 0 15px}
+#oracle-experience .ox-day-dial{left:50%;top:50%;width:174px;transform:translate(-50%,-50%)}
+#oracle-experience .ox-day-num{font-size:39px}
+#oracle-experience .ox-phase-label{margin:0 0 10px}
+#oracle-experience .ox-hero h1{font-size:clamp(48px,6.2vw,86px);line-height:.98;margin:0;max-width:10ch}
+#oracle-experience .ox-campaign-name{font-size:16px;max-width:42ch;margin:16px 0 0}
+#oracle-experience .ox-hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:27px}
+#oracle-experience .ox-hero-action-primary,#oracle-experience .ox-hero-action-secondary{min-height:43px;border-radius:9px;padding:0 15px;font-size:8px;font-weight:700;letter-spacing:.07em;transition:transform .2s ease,background-color .2s ease,border-color .2s ease,box-shadow .2s ease}
+#oracle-experience .ox-hero-action-primary{border:1px solid #17191f;background:#17191f;color:#fff;box-shadow:0 7px 18px rgba(23,25,31,.12)}
+#oracle-experience .ox-hero-action-primary span{margin-left:9px;color:#c7caff}
+#oracle-experience .ox-hero-action-primary:hover{transform:translateY(-2px);background:#333642;box-shadow:0 12px 24px rgba(23,25,31,.15)}
+#oracle-experience .ox-hero-action-secondary{border:1px solid #e0e3eb;background:rgba(255,255,255,.72);color:#505866}
+#oracle-experience .ox-hero-action-secondary:hover{transform:translateY(-2px);border-color:#c3c9ff;background:#fff}
+#oracle-experience .ox-hero-aside{display:flex;flex-direction:column;justify-content:center;gap:0;position:relative;z-index:1;width:100%;max-width:none;min-height:310px;margin:0;padding:30px;border:1px solid rgba(223,227,237,.92);border-radius:24px;background:linear-gradient(145deg,rgba(255,255,255,.97) 0%,rgba(255,255,255,.94) 60%,rgba(242,244,255,.94) 100%);box-shadow:0 24px 70px rgba(37,43,84,.1),0 3px 10px rgba(37,43,84,.035);animation:ox-rise-in .72s .28s cubic-bezier(.16,.75,.22,1) both}
+#oracle-experience .ox-hero-aside::after{content:"";position:absolute;z-index:-1;right:-45px;top:-56px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(111,123,255,.15),rgba(116,214,199,.07) 46%,transparent 72%);pointer-events:none}
+#oracle-experience .ox-preview-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:31px;padding-bottom:13px;border-bottom:1px solid #eceef3;color:#737b89;font:650 8px/1.3 var(--ox-mono);letter-spacing:.12em}
+#oracle-experience .ox-preview-live{display:flex;align-items:center;gap:7px;color:#16866e;font-size:7px}
+#oracle-experience .ox-preview-live i{width:6px;height:6px;border-radius:50%;background:#19a683;box-shadow:0 0 0 3px #e2f4ee}
+#oracle-experience .ox-position-card,#oracle-experience .ox-gate-line{position:relative;z-index:1}
+#oracle-experience .ox-hero-aside .ox-position-title{font-size:clamp(22px,2.25vw,30px);margin:9px 0 7px}
+#oracle-experience .ox-hero-aside .ox-position-detail{font-size:12px}
+#oracle-experience .ox-gate-line{height:auto;justify-content:flex-start;border:0;border-top:1px solid #e8eaf0;margin-top:27px;padding:17px 0 0;gap:7px}
+#oracle-experience .ox-gate-line b{font:600 11px/1.5 var(--ox-sans);color:#323743}
+@media(max-width:860px){
+  #oracle-experience .ox-hero{grid-template-columns:minmax(0,1fr) minmax(280px,.92fr);gap:25px}
+  #oracle-experience .ox-hero-aside{padding:23px;border-radius:20px}
+  #oracle-experience .ox-preview-top{margin-bottom:23px}
+}
+@media(max-width:620px){
+  #oracle-experience .ox-hero{display:grid;grid-template-columns:1fr;gap:22px;padding:28px 0 22px;text-align:center}
+  #oracle-experience .ox-hero-left{margin:0 auto}
+  #oracle-experience .ox-dayline{margin:0 auto 13px}
+  #oracle-experience .ox-hero h1{max-width:none;font-size:clamp(48px,13vw,66px);line-height:1.02}
+  #oracle-experience .ox-campaign-name{margin:12px auto 0;font-size:14px}
+  #oracle-experience .ox-hero-actions{justify-content:center;margin-top:20px}
+  #oracle-experience .ox-hero-action-primary,#oracle-experience .ox-hero-action-secondary{min-height:41px;padding:0 12px;font-size:7px}
+  #oracle-experience .ox-hero-aside{min-height:0;padding:19px;border-radius:17px;text-align:left}
+  #oracle-experience .ox-preview-top{margin-bottom:19px}
+  #oracle-experience .ox-hero-aside .ox-position-title{font-size:21px}
+  #oracle-experience .ox-gate-line{margin-top:18px;padding-top:13px}
+}
+@media(prefers-reduced-motion:reduce){#oracle-experience *,#oracle-return-to-experience{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+/* NOW screen: a crisp, card-led command center inspired by modern analytics dashboards. */
+#oracle-experience .ox-topbar{background:rgba(255,255,255,.92);border-bottom-color:#e7e9ee}
+#oracle-experience .ox-nav{background:rgba(255,255,255,.94);border-bottom-color:#e7e9ee}
+#oracle-experience .ox-topbar,#oracle-experience .ox-nav{backdrop-filter:blur(16px)}
+#oracle-experience [data-screen="now"] .ox-eyebrow{font-size:9px;letter-spacing:.1em}
+#oracle-experience .ox-hero{display:block;position:relative;isolation:isolate;overflow:hidden;text-align:center;border:0;gap:0;padding:42px 0 26px}
+#oracle-experience .ox-hero::before{content:"";position:absolute;z-index:-1;pointer-events:none;left:50%;top:0;width:min(880px,100%);height:350px;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(105,120,255,.13),rgba(213,223,255,.07) 38%,transparent 72%)}
+#oracle-experience .ox-hero-left{max-width:900px;margin:0 auto}
+#oracle-experience .ox-dayline{justify-content:center;align-items:center;gap:8px;min-height:174px;line-height:1;color:var(--ox-ink)}
+#oracle-experience .ox-day-dial{left:50%;top:50%;width:166px;opacity:.85;transform:translate(-50%,-50%)}
+#oracle-experience .ox-day-num{font:750 39px/1 var(--ox-sans);letter-spacing:-.075em;color:var(--ox-ink)}
+#oracle-experience .ox-day-total{padding:0;text-align:left;color:var(--ox-muted);font:500 10px/1.2 var(--ox-mono);letter-spacing:0}
+#oracle-experience .ox-day-total b{font-size:12px;color:var(--ox-ink)}
+#oracle-experience .ox-day-total small{margin-top:4px;font-size:7px;line-height:1.3;letter-spacing:.08em}
+#oracle-experience .ox-phase-label{margin:0 0 9px;color:#656d7a;font-size:9px;letter-spacing:.12em}
+#oracle-experience .ox-hero h1{font:720 clamp(46px,6.4vw,76px)/1.02 var(--ox-sans);letter-spacing:-.065em;margin:0 auto;max-width:950px;color:#17191f}
+#oracle-experience .ox-campaign-name{font:400 16px/1.5 var(--ox-sans);letter-spacing:0;color:#6b7280;margin:14px 0 0}
+#oracle-experience .ox-hero-aside{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(220px,.8fr);align-items:center;gap:20px;text-align:left;max-width:970px;margin:32px auto 0;padding:20px 24px;border:1px solid #e5e7ed;border-radius:18px;background:rgba(255,255,255,.94);box-shadow:0 12px 40px rgba(21,30,55,.055);animation:ox-rise-in .65s .25s ease both}
+#oracle-experience .ox-hero-aside .ox-label{margin:0;font-size:8px;letter-spacing:.11em}
+#oracle-experience .ox-position-title{font:650 23px/1.2 var(--ox-sans);letter-spacing:-.035em;margin:8px 0 5px;color:var(--ox-ink)}
+#oracle-experience .ox-position-detail{font-size:11px;color:var(--ox-muted)}
+#oracle-experience .ox-gate-line{height:100%;justify-content:center;border-top:0;border-left:1px solid #e7e9ee;margin:0;padding:2px 0 2px 22px;gap:7px}
+#oracle-experience .ox-gate-line b{font:550 11px/1.5 var(--ox-sans);color:#303542}
+#oracle-experience .ox-now-grid{grid-template-columns:minmax(220px,.64fr) minmax(0,1.36fr);gap:17px;padding:16px 0 24px;border:0;animation:ox-rise-in .68s .38s ease both}
+#oracle-experience .ox-bottleneck,#oracle-experience .ox-move{border:1px solid #e5e7ed;border-radius:18px;background:#fff;box-shadow:0 12px 36px rgba(21,30,55,.045)}
+#oracle-experience .ox-bottleneck{padding:23px 24px;align-self:start;min-height:190px}
+#oracle-experience .ox-section-index{gap:9px;font-size:8px;letter-spacing:.1em}
+#oracle-experience .ox-bottleneck h2{font:620 22px/1.28 var(--ox-sans);letter-spacing:-.035em;margin:20px 0 10px;color:#20232b}
+#oracle-experience .ox-source-note{font-size:10px;color:#747b87}
+#oracle-experience .ox-move{color:var(--ox-ink);padding:25px 29px;overflow:hidden}
+#oracle-experience .ox-move::before{left:0;width:4px;border-radius:0 4px 4px 0;background:linear-gradient(180deg,#7785ff,#56b8b0)}
+#oracle-experience .ox-move::after{left:-1px;background:linear-gradient(180deg,transparent,#aeb6ff 35%,#fff 52%,#7586f5 75%,transparent);filter:drop-shadow(0 0 5px rgba(91,99,238,.5))}
+#oracle-experience .ox-move .ox-section-index{color:#6d7480}
+#oracle-experience .ox-move .ox-section-index>span:first-child{color:var(--ox-rust)}
+#oracle-experience .ox-source-tag{border-color:#e3e6ed;border-radius:6px;color:#68717e;background:#fafbfc;font-size:7px}
+#oracle-experience .ox-move h2{font:620 clamp(23px,2.5vw,31px)/1.22 var(--ox-sans);letter-spacing:-.04em;margin:20px 0 6px;max-width:31ch;color:#1d2027}
+#oracle-experience .ox-task-state{color:#6c7480;font:500 8px/1.5 var(--ox-mono)}
+#oracle-experience .ox-move-facts{border-color:#e9ebf0;margin-top:19px}
+#oracle-experience .ox-move-facts>div{border-color:#e9ebf0;padding:10px 0}
+#oracle-experience .ox-move-facts dt{color:#777f8b;font-size:7px}
+#oracle-experience .ox-move-facts dd{color:#343943;font-size:10px}
+#oracle-experience .ox-move-actions{margin-top:18px}
+#oracle-experience .ox-primary{min-height:40px;border-color:#191b20;border-radius:9px;background:#191b20;color:#fff;padding:0 14px;font-size:8px;transition:transform .2s ease,background-color .2s ease,box-shadow .2s ease}
+#oracle-experience .ox-primary:hover{transform:translateY(-1px);background:#343741;box-shadow:0 5px 15px rgba(23,25,31,.14)}
+#oracle-experience .ox-primary span{color:#bfc5ff}
+#oracle-experience .ox-move .ox-text-button{color:#626b78}
+#oracle-experience .ox-bottomline{grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:12px;padding:4px 0 20px;border:0}
+#oracle-experience .ox-bottomstat{min-height:65px;justify-content:center;padding:12px 15px;border:1px solid #e5e7ed;border-radius:13px;background:#fff;box-shadow:0 6px 20px rgba(21,30,55,.03)}
+#oracle-experience .ox-bottomstat span{font-size:7px;color:#737b88}
+#oracle-experience .ox-bottomstat b{font:600 14px/1.3 var(--ox-sans);letter-spacing:-.02em;color:#252832}
+#oracle-experience .ox-inline-link{display:flex;align-items:center;border:1px solid #e5e7ed;border-radius:10px;background:#fff;padding:0 15px;min-height:44px;font-size:8px;transition:border-color .2s ease,transform .2s ease}
+#oracle-experience .ox-inline-link:hover{transform:translateY(-1px);border-color:#bbc2ff}
+#oracle-experience .ox-inline-link span{color:var(--ox-rust)}
+#oracle-experience .ox-move .ox-decision-output{border-color:#e9ebf0}
+#oracle-experience .ox-move .ox-verdict{color:#288168}
+#oracle-experience .ox-move .ox-verdict-detail{color:#343943}
+#oracle-experience .ox-move .ox-verdict-detail strong{color:#717986}
+#oracle-experience .ox-move .ox-decision-output details{border-color:#e9ebf0;color:#59616d}
+#oracle-experience .ox-move .ox-decision-output pre{color:#414957}
+#oracle-experience .ox-footer{border-top:1px solid #e5e7ed;color:#757d89}
+#oracle-experience .ox-footer>span:first-child{color:#282c35}
+#oracle-experience .ox-footer button{color:var(--ox-rust)}
+#oracle-experience .ox-live-dot{background:#16a17e;box-shadow:0 0 0 3px #e0f2ec}
+#oracle-experience .ox-original-link{border-radius:8px;border-color:#e2e5eb;background:#fff}
+#oracle-experience .ox-primary:focus-visible,#oracle-experience .ox-original-link:focus-visible{outline-color:#6370f2}
+@media(max-width:860px){
+  #oracle-experience .ox-hero-aside{max-width:100%}
+  #oracle-experience .ox-now-grid{grid-template-columns:minmax(190px,.6fr) minmax(0,1.4fr);gap:13px}
+  #oracle-experience .ox-bottleneck{padding:20px}
+  #oracle-experience .ox-move{padding:22px}
+  #oracle-experience .ox-bottomline{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+  #oracle-experience .ox-hero{padding:30px 0 17px}
+  #oracle-experience .ox-dayline{min-height:150px}
+  #oracle-experience .ox-day-dial{width:146px;left:50%;top:50%}
+  #oracle-experience .ox-day-num{font-size:35px}
+  #oracle-experience .ox-hero h1{font-size:clamp(43px,12vw,59px);line-height:1.03}
+  #oracle-experience .ox-campaign-name{font-size:14px;margin-top:10px}
+  #oracle-experience .ox-hero-aside{grid-template-columns:1fr;gap:14px;margin-top:23px;padding:17px 18px;border-radius:15px}
+  #oracle-experience .ox-position-title{font-size:20px}
+  #oracle-experience .ox-gate-line{border-left:0;border-top:1px solid #e7e9ee;padding:13px 0 0}
+  #oracle-experience .ox-now-grid{display:grid;grid-template-columns:1fr;gap:12px;padding:12px 0 18px}
+  #oracle-experience .ox-bottleneck{min-height:0;padding:18px;border-radius:15px}
+  #oracle-experience .ox-bottleneck h2{font-size:20px;margin:14px 0 8px}
+  #oracle-experience .ox-move{padding:19px 17px;border-radius:15px}
+  #oracle-experience .ox-move h2{font-size:24px;margin-top:16px}
+  #oracle-experience .ox-move-facts>div{grid-template-columns:83px minmax(0,1fr);gap:10px;padding:9px 0}
+  #oracle-experience .ox-bottomline{grid-template-columns:1fr 1fr;gap:9px;padding-bottom:16px}
+  #oracle-experience .ox-bottomstat{min-height:60px;padding:10px 12px}
+  #oracle-experience .ox-inline-link{grid-column:1/-1;justify-self:stretch;justify-content:center}
+  #oracle-experience .ox-footer{border-top:1px solid #e5e7ed}
+}
+@media(prefers-reduced-motion:reduce){#oracle-experience *,#oracle-return-to-experience{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+@keyframes ox-hero-drift{0%{transform:translate(-52%,-2%) scale(.94);opacity:.38}100%{transform:translate(-47%,4%) scale(1.08);opacity:.76}}
+@keyframes ox-orbit-spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes ox-title-sheen{0%{background-position:100% 50%}100%{background-position:0 50%}}
+#oracle-experience .ox-hero{padding-top:34px}
+#oracle-experience .ox-hero::before{width:min(980px,112%);height:420px;filter:blur(5px);animation:ox-hero-drift 10s ease-in-out infinite alternate}
+#oracle-experience .ox-hero::after{content:"";position:absolute;z-index:-1;pointer-events:none;inset:auto;left:50%;top:50%;width:min(980px,112%);height:420px;background:radial-gradient(ellipse at 17% 48%,rgba(129,104,255,.13),transparent 34%),radial-gradient(ellipse at 82% 63%,rgba(25,183,165,.11),transparent 33%);filter:blur(25px);animation:ox-hero-drift 13s ease-in-out -4s infinite alternate-reverse}
+#oracle-experience .ox-dayline{min-height:202px}
+#oracle-experience .ox-day-dial{width:218px}
+#oracle-experience .ox-day-num{font-size:45px}
+#oracle-experience .ox-dial-track{stroke:var(--ox-rust);stroke-width:1.2;opacity:.24}
+#oracle-experience .ox-dial-tick{opacity:.23}
+#oracle-experience .ox-dial-tick-major{opacity:.46}
+#oracle-experience .ox-dial-orbit{opacity:.62;animation:ox-orbit-spin 34s linear infinite}
+#oracle-experience .ox-dial-marker{filter:drop-shadow(0 0 8px rgba(18,128,110,.65))}
+#oracle-experience .ox-hero h1{background-image:linear-gradient(105deg,#17191f 4%,#525bed 42%,#7c68ee 62%,#17191f 96%);background-size:220% 100%;background-position:0 50%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:ox-rise-in .65s .22s cubic-bezier(.16,.75,.22,1) both,ox-title-sheen 2.2s .7s cubic-bezier(.2,.65,.25,1) both}
+#oracle-experience .ox-hero-aside{position:relative;overflow:hidden}
+#oracle-experience .ox-hero-aside::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(180deg,#737eff,#b5a7ff 52%,#51baa9);opacity:.85}
+#oracle-experience .ox-bottomstat{transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+#oracle-experience .ox-bottomstat:hover{transform:translateY(-2px);border-color:#cdd2ff;box-shadow:0 10px 25px rgba(70,83,200,.08)}
+@media(max-width:620px){
+  #oracle-experience .ox-hero{padding-top:27px}
+  #oracle-experience .ox-dayline{min-height:164px}
+  #oracle-experience .ox-day-dial{width:174px}
+  #oracle-experience .ox-day-num{font-size:39px}
+}
+@media(prefers-reduced-motion:reduce){#oracle-experience *,#oracle-return-to-experience{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+/* NOW hero: a product-led split layout with a live campaign preview. */
+#oracle-experience .ox-hero{display:grid;position:relative;isolation:isolate;overflow:hidden;grid-template-columns:minmax(0,1.08fr) minmax(300px,.92fr);align-items:center;gap:clamp(24px,4vw,58px);padding:34px 0 42px;border:0;text-align:left}
+#oracle-experience .ox-hero::before{left:58%;top:0;width:min(980px,112%);height:420px;transform:translateX(-50%);background:radial-gradient(ellipse at 32% 45%,rgba(109,124,255,.15),rgba(213,223,255,.075) 42%,transparent 74%);filter:blur(5px);animation:ox-hero-drift 10s ease-in-out infinite alternate}
+#oracle-experience .ox-hero::after{left:57%;top:5%;width:min(980px,112%);height:420px;transform:translateX(-50%);background:radial-gradient(ellipse at 17% 48%,rgba(129,104,255,.13),transparent 34%),radial-gradient(ellipse at 82% 63%,rgba(25,183,165,.11),transparent 33%);filter:blur(25px);animation:ox-hero-drift 13s ease-in-out -4s infinite alternate-reverse}
+#oracle-experience .ox-hero-left{position:relative;z-index:1;width:100%;max-width:660px;margin:0}
+#oracle-experience .ox-dayline{width:174px;min-height:164px;display:flex;align-items:center;justify-content:center;gap:7px;margin:0 0 9px;line-height:1}
+#oracle-experience .ox-day-dial{left:50%;top:50%;width:174px;transform:translate(-50%,-50%)}
+#oracle-experience .ox-day-num{font:750 39px/1 var(--ox-sans);letter-spacing:-.075em;color:#17191f}
+#oracle-experience .ox-day-total{padding:0;text-align:left;color:#737b89;font:500 9px/1.2 var(--ox-mono);letter-spacing:0}
+#oracle-experience .ox-day-total b{font-size:12px;color:#17191f}
+#oracle-experience .ox-day-total small{margin-top:4px;font-size:7px;line-height:1.3;letter-spacing:.08em}
+#oracle-experience .ox-phase-label{margin:0 0 10px;color:#656d7a;font-size:9px;letter-spacing:.13em}
+#oracle-experience .ox-hero h1{max-width:10ch;margin:0;font:720 clamp(52px,6.4vw,86px)/.98 var(--ox-sans);letter-spacing:-.067em;overflow-wrap:normal;color:transparent;background-image:linear-gradient(105deg,#17191f 5%,#4c56e8 43%,#8067e8 66%,#17191f 96%);background-size:220% 100%;background-position:0 50%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:ox-rise-in .65s .22s cubic-bezier(.16,.75,.22,1) both,ox-title-sheen 2.2s .7s cubic-bezier(.2,.65,.25,1) both}
+#oracle-experience .ox-campaign-name{max-width:42ch;margin:15px 0 0;font:400 15px/1.55 var(--ox-sans);letter-spacing:0;color:#6b7280}
+#oracle-experience .ox-hero-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:25px}
+#oracle-experience .ox-hero-action-primary,#oracle-experience .ox-hero-action-secondary{min-height:43px;border-radius:9px;padding:0 15px;font-size:8px;font-weight:700;letter-spacing:.07em;transition:transform .2s ease,background-color .2s ease,border-color .2s ease,box-shadow .2s ease}
+#oracle-experience .ox-hero-action-primary{border:1px solid #17191f;background:#17191f;color:#fff;box-shadow:0 7px 18px rgba(23,25,31,.12)}
+#oracle-experience .ox-hero-action-primary span{margin-left:9px;color:#c7caff}
+#oracle-experience .ox-hero-action-primary:hover{transform:translateY(-2px);background:#333642;box-shadow:0 12px 24px rgba(23,25,31,.15)}
+#oracle-experience .ox-hero-action-secondary{border:1px solid #e0e3eb;background:rgba(255,255,255,.72);color:#505866}
+#oracle-experience .ox-hero-action-secondary:hover{transform:translateY(-2px);border-color:#c3c9ff;background:#fff}
+#oracle-experience .ox-hero-aside{display:flex;flex-direction:column;justify-content:center;gap:0;position:relative;z-index:1;width:100%;max-width:none;min-height:310px;margin:0;padding:28px;border:1px solid rgba(223,227,237,.92);border-radius:23px;background:linear-gradient(145deg,rgba(255,255,255,.97),rgba(255,255,255,.94) 60%,rgba(242,244,255,.95));box-shadow:0 24px 70px rgba(37,43,84,.1),0 3px 10px rgba(37,43,84,.035);animation:ox-rise-in .72s .28s cubic-bezier(.16,.75,.22,1) both}
+#oracle-experience .ox-hero-aside::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;border-radius:23px 0 0 23px;background:linear-gradient(180deg,#737eff,#b5a7ff 52%,#51baa9);opacity:.9}
+#oracle-experience .ox-hero-aside::after{content:"";position:absolute;z-index:-1;right:-45px;top:-56px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(111,123,255,.15),rgba(116,214,199,.07) 46%,transparent 72%);pointer-events:none}
+#oracle-experience .ox-preview-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:30px;padding-bottom:13px;border-bottom:1px solid #eceef3;color:#737b89;font:650 8px/1.3 var(--ox-mono);letter-spacing:.12em}
+#oracle-experience .ox-preview-live{display:flex;align-items:center;gap:7px;color:#16866e;font-size:7px}
+#oracle-experience .ox-preview-live i{width:6px;height:6px;border-radius:50%;background:#19a683;box-shadow:0 0 0 3px #e2f4ee;animation:ox-live-signal 3.2s ease-in-out infinite}
+#oracle-experience .ox-position-card,#oracle-experience .ox-gate-line{position:relative;z-index:1}
+#oracle-experience .ox-hero-aside .ox-label{margin:0;font-size:8px;letter-spacing:.11em}
+#oracle-experience .ox-hero-aside .ox-position-title{font:650 clamp(22px,2.3vw,30px)/1.18 var(--ox-sans);letter-spacing:-.04em;margin:9px 0 6px;color:#20232b}
+#oracle-experience .ox-hero-aside .ox-position-detail{font-size:11px;color:#737b89}
+#oracle-experience .ox-gate-line{height:auto;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;border:0;border-top:1px solid #e8eaf0;margin-top:25px;padding:16px 0 0;gap:7px}
+#oracle-experience .ox-gate-line b{font:550 11px/1.55 var(--ox-sans);color:#323743}
+#oracle-experience .ox-hero-action-primary:focus-visible,#oracle-experience .ox-hero-action-secondary:focus-visible{outline:3px solid #6370f2;outline-offset:3px}
+@media(max-width:860px) and (min-width:761px){#oracle-experience .ox-hero{grid-template-columns:minmax(0,1fr) minmax(280px,.92fr);gap:25px}#oracle-experience .ox-hero-aside{padding:23px;border-radius:20px}#oracle-experience .ox-preview-top{margin-bottom:23px}}
+@media(max-width:760px){#oracle-experience .ox-hero{grid-template-columns:minmax(0,1fr);gap:22px;padding:28px 0 22px;text-align:center}#oracle-experience .ox-hero-left{margin:0 auto}#oracle-experience .ox-dayline{margin:0 auto 12px}#oracle-experience .ox-phase-label{margin-bottom:9px}#oracle-experience .ox-hero h1{max-width:none;margin:0 auto;font-size:clamp(46px,11vw,68px);line-height:1.01}#oracle-experience .ox-campaign-name{margin:12px auto 0;font-size:14px}#oracle-experience .ox-hero-actions{justify-content:center;margin-top:19px}#oracle-experience .ox-hero-action-primary,#oracle-experience .ox-hero-action-secondary{min-height:41px;padding:0 12px;font-size:7px}#oracle-experience .ox-hero-aside{min-height:0;padding:20px;border-radius:17px;text-align:left}#oracle-experience .ox-hero-aside::before{border-radius:17px 0 0 17px}#oracle-experience .ox-preview-top{margin-bottom:19px}#oracle-experience .ox-hero-aside .ox-position-title{font-size:21px}#oracle-experience .ox-gate-line{margin-top:18px;padding-top:13px}}
+@media(prefers-reduced-motion:reduce){#oracle-experience *,#oracle-return-to-experience{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+/* Theme control and night palette for the full ORACLE workspace. */
+#oracle-experience .ox-theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:0 10px;border:1px solid var(--ox-rule);border-radius:8px;background:transparent;color:var(--ox-muted);font:650 8px/1 var(--ox-mono);letter-spacing:.07em;white-space:nowrap;transition:background-color .2s ease,border-color .2s ease,color .2s ease,transform .2s ease}
+#oracle-experience .ox-theme-toggle:hover{transform:translateY(-1px);border-color:var(--ox-rust);color:var(--ox-ink)}
+#oracle-experience .ox-theme-toggle>span:first-child{font:500 16px/1 var(--ox-sans);color:var(--ox-rust)}
+#oracle-experience[data-theme="dark"]{--ox-paper:#0b0e14;--ox-paper-deep:#151b26;--ox-ink:#edf0fa;--ox-muted:#9ba6b9;--ox-faint:#758198;--ox-rule:#273246;--ox-rust:#a09eff;--ox-rust-soft:#292949;--ox-moss:#5bd7b1;--ox-moss-soft:#153c35;--ox-night:#141a2b;--ox-night-line:#39445f;--ox-white:#f2f5fd;--ox-alert:#ffc17d;--ox-alert-soft:#3f301e;color-scheme:dark;background:var(--ox-paper);color:var(--ox-ink)}
+#oracle-experience[data-theme="dark"] .ox-topbar,#oracle-experience[data-theme="dark"] .ox-nav{background:rgba(11,14,20,.88);border-color:#273246}
+#oracle-experience[data-theme="dark"] .ox-topbar{border-bottom-color:#273246}
+#oracle-experience[data-theme="dark"] .ox-wordmark,#oracle-experience[data-theme="dark"] .ox-footer>span:first-child{color:var(--ox-ink)}
+#oracle-experience[data-theme="dark"] .ox-nav button[aria-current="page"]{color:#b1afff}
+#oracle-experience[data-theme="dark"] .ox-original-link,#oracle-experience[data-theme="dark"] .ox-theme-toggle{border-color:#303b50;background:rgba(255,255,255,.025);color:#c5ccda}
+#oracle-experience[data-theme="dark"] .ox-original-link:hover,#oracle-experience[data-theme="dark"] .ox-theme-toggle:hover{border-color:#8282ed;background:rgba(158,158,255,.09);color:#fff}
+#oracle-experience[data-theme="dark"] .ox-hero::before{background:radial-gradient(ellipse at 32% 45%,rgba(111,111,255,.2),rgba(83,80,165,.09) 42%,transparent 74%)}
+#oracle-experience[data-theme="dark"] .ox-hero::after{background:radial-gradient(ellipse at 17% 48%,rgba(129,104,255,.2),transparent 34%),radial-gradient(ellipse at 82% 63%,rgba(25,183,165,.12),transparent 33%)}
+#oracle-experience[data-theme="dark"] .ox-day-num,#oracle-experience[data-theme="dark"] .ox-day-total b{color:#f0f2ff}
+#oracle-experience[data-theme="dark"] .ox-dial-track{stroke:#a09eff;opacity:.32}
+#oracle-experience[data-theme="dark"] .ox-dial-tick{stroke:#b2bbcf;opacity:.26}
+#oracle-experience[data-theme="dark"] .ox-dial-tick-major{opacity:.5}
+#oracle-experience[data-theme="dark"] .ox-dial-marker{stroke:#0b0e14}
+#oracle-experience[data-theme="dark"] .ox-hero h1{background-image:linear-gradient(105deg,#f0f2ff 4%,#a5a4ff 43%,#6bdbca 68%,#f0f2ff 96%)}
+#oracle-experience[data-theme="dark"] .ox-campaign-name,#oracle-experience[data-theme="dark"] .ox-phase-label{color:#a6b0c2}
+#oracle-experience[data-theme="dark"] .ox-hero-aside{border-color:#2a3448;background:linear-gradient(145deg,rgba(23,29,43,.98),rgba(18,24,37,.97) 62%,rgba(24,24,49,.98));box-shadow:0 24px 70px rgba(0,0,0,.38),0 3px 10px rgba(0,0,0,.22)}
+#oracle-experience[data-theme="dark"] .ox-hero-aside::after{background:radial-gradient(circle,rgba(111,123,255,.2),rgba(69,181,167,.09) 46%,transparent 72%)}
+#oracle-experience[data-theme="dark"] .ox-preview-top,#oracle-experience[data-theme="dark"] .ox-gate-line{border-color:#30394d;color:#9ca8bd}
+#oracle-experience[data-theme="dark"] .ox-hero-aside .ox-position-title,#oracle-experience[data-theme="dark"] .ox-gate-line b{color:#eef1fb}
+#oracle-experience[data-theme="dark"] .ox-hero-aside .ox-position-detail{color:#a0abc0}
+#oracle-experience[data-theme="dark"] .ox-hero-action-primary{border-color:#a09eff;background:#a09eff;color:#111321;box-shadow:0 8px 22px rgba(97,93,227,.2)}
+#oracle-experience[data-theme="dark"] .ox-hero-action-primary span{color:#292949}
+#oracle-experience[data-theme="dark"] .ox-hero-action-primary:hover{background:#b7b5ff;border-color:#b7b5ff}
+#oracle-experience[data-theme="dark"] .ox-hero-action-secondary{border-color:#39445a;background:rgba(255,255,255,.035);color:#d0d7e7}
+#oracle-experience[data-theme="dark"] .ox-hero-action-secondary:hover{border-color:#9290ff;background:rgba(158,158,255,.1)}
+#oracle-experience[data-theme="dark"] .ox-bottleneck,#oracle-experience[data-theme="dark"] .ox-move{border-color:#273246;background:#111722;color:#e9edf7;box-shadow:0 14px 36px rgba(0,0,0,.2)}
+#oracle-experience[data-theme="dark"] .ox-move{background:linear-gradient(145deg,#151b2b,#111722 70%,#17172b)}
+#oracle-experience[data-theme="dark"] .ox-bottleneck h2,#oracle-experience[data-theme="dark"] .ox-move h2,#oracle-experience[data-theme="dark"] .ox-move-facts dd,#oracle-experience[data-theme="dark"] .ox-move .ox-verdict-detail,#oracle-experience[data-theme="dark"] .ox-move .ox-verdict-detail strong,#oracle-experience[data-theme="dark"] .ox-move .ox-decision-output details,#oracle-experience[data-theme="dark"] .ox-move .ox-decision-output pre{color:#e9edf7}
+#oracle-experience[data-theme="dark"] .ox-source-note,#oracle-experience[data-theme="dark"] .ox-task-state,#oracle-experience[data-theme="dark"] .ox-move-facts dt,#oracle-experience[data-theme="dark"] .ox-move .ox-section-index,#oracle-experience[data-theme="dark"] .ox-move .ox-text-button{color:#a0abc0}
+#oracle-experience[data-theme="dark"] .ox-move-facts,#oracle-experience[data-theme="dark"] .ox-move-facts>div,#oracle-experience[data-theme="dark"] .ox-move .ox-decision-output{border-color:#303a50}
+#oracle-experience[data-theme="dark"] .ox-source-tag{border-color:#3c4660;background:#1b2233;color:#b6c0d2}
+#oracle-experience[data-theme="dark"] .ox-primary{border-color:#a09eff;background:#a09eff;color:#10121f}
+#oracle-experience[data-theme="dark"] .ox-primary span{color:#27264b}
+#oracle-experience[data-theme="dark"] .ox-primary:hover{background:#b7b5ff}
+#oracle-experience[data-theme="dark"] .ox-bottomstat,#oracle-experience[data-theme="dark"] .ox-inline-link{border-color:#283246;background:#121823;color:#edf0fa;box-shadow:0 8px 22px rgba(0,0,0,.16)}
+#oracle-experience[data-theme="dark"] .ox-bottomstat span,#oracle-experience[data-theme="dark"] .ox-bottomstat b{color:#d4d9e6}
+#oracle-experience[data-theme="dark"] .ox-footer{border-color:#283246;color:#9ba6b9}
+#oracle-experience[data-theme="dark"] .ox-page-heading h1,#oracle-experience[data-theme="dark"] .ox-campaign-columns h2,#oracle-experience[data-theme="dark"] .ox-campaign-next>b,#oracle-experience[data-theme="dark"] .ox-mission-primary h2,#oracle-experience[data-theme="dark"] .ox-mission-aside h3,#oracle-experience[data-theme="dark"] .ox-ledger-row strong,#oracle-experience[data-theme="dark"] .ox-intel-copy h2,#oracle-experience[data-theme="dark"] .ox-signal h2,#oracle-experience[data-theme="dark"] .ox-audit-head h2{color:#edf0fa}
+#oracle-experience[data-theme="dark"] .ox-campaign-columns,#oracle-experience[data-theme="dark"] .ox-mission-layout,#oracle-experience[data-theme="dark"] .ox-proof-ledger,#oracle-experience[data-theme="dark"] .ox-intel-state{border-color:#2a3448}
+#oracle-experience[data-theme="dark"] .ox-campaign-columns article+article,#oracle-experience[data-theme="dark"] .ox-proof-ledger>section+section,#oracle-experience[data-theme="dark"] .ox-mission-aside,#oracle-experience[data-theme="dark"] .ox-intel-copy{border-color:#2a3448}
+#oracle-experience[data-theme="dark"] .ox-lock-note{background:#15362f;color:#c4eee0}
+#oracle-experience[data-theme="dark"] .ox-lock-note.is-locked{background:#3a2c1c;color:#ffcf91}
+#oracle-experience[data-theme="dark"] .ox-ask{background:#151b27;border-top-color:#a09eff}
+#oracle-experience[data-theme="dark"] .ox-ask textarea,#oracle-experience[data-theme="dark"] .ox-token input{border-color:#354058;background:#0e131c;color:#edf0fa}
+#oracle-experience[data-theme="dark"] .ox-ask textarea::placeholder,#oracle-experience[data-theme="dark"] .ox-token input::placeholder{color:#748198}
+#oracle-experience[data-theme="dark"] .ox-token-row button{border-color:#a09eff;background:#a09eff;color:#111321}
+#oracle-experience[data-theme="dark"] .ox-token,#oracle-experience[data-theme="dark"] .ox-audit-head,#oracle-experience[data-theme="dark"] .ox-audit-row{border-color:#2a3448}
+#oracle-experience[data-theme="dark"] .ox-decision-output{border-color:#39445a}
+@media(max-width:620px){#oracle-experience .ox-topbar{gap:7px}#oracle-experience .ox-topmeta{margin-left:auto}#oracle-experience .ox-topmeta [data-f="source"],#oracle-experience .ox-top-sep{display:none}#oracle-experience .ox-theme-toggle{min-height:34px;padding:0 8px}#oracle-experience .ox-theme-toggle .ox-theme-label{display:none}}
+@media(prefers-reduced-motion:reduce){#oracle-experience *,#oracle-return-to-experience{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+/* Editorial scale and product-preview proportions drawn from the supplied references. */
+#oracle-experience .ox-hero h1{max-width:9.3ch;font-size:clamp(64px,8.8vw,112px);line-height:.94;letter-spacing:-.078em}
+#oracle-experience .ox-hero-aside{min-height:338px;padding:32px}
+#oracle-experience .ox-preview-top{margin-bottom:34px}
+#oracle-experience .ox-hero-aside .ox-position-title{font-size:clamp(23px,2.6vw,32px)}
+#oracle-experience .ox-hero-aside .ox-position-detail{font-size:12px}
+#oracle-experience .ox-gate-line{margin-top:27px;padding-top:17px}
+#oracle-experience .ox-gate-line b{font-size:12px}
+#oracle-experience .ox-hero-action-primary,#oracle-experience .ox-hero-action-secondary{min-height:46px;font-size:9px}
+@media(max-width:860px) and (min-width:761px){#oracle-experience .ox-hero h1{font-size:clamp(60px,8vw,76px)}#oracle-experience .ox-hero-aside{min-height:310px;padding:23px}}
+@media(max-width:760px){#oracle-experience .ox-hero h1{max-width:none;font-size:clamp(50px,12.5vw,68px);line-height:1.01}#oracle-experience .ox-hero-aside{min-height:0;padding:20px}#oracle-experience .ox-preview-top{margin-bottom:20px}#oracle-experience .ox-hero-aside .ox-position-title{font-size:22px}#oracle-experience .ox-gate-line{margin-top:18px;padding-top:13px}}
+@media(prefers-reduced-motion:reduce){#oracle-experience *,#oracle-return-to-experience{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* ORACLE craft system: restrained contrast, one indigo accent, and quiet motion. */
+#oracle-experience[data-theme="dark"]{
+  --ox-paper:#0a0a0a;--ox-paper-deep:#18181b;--ox-ink:#f3f4f6;--ox-muted:#9ca3af;--ox-faint:#6b7280;--ox-rule:#1f1f1f;
+  --ox-rust:#5e6ad2;--ox-rust-soft:rgba(94,106,210,.14);--ox-moss:#9ca3af;--ox-moss-soft:rgba(156,163,175,.12);
+  --ox-night:#121316;--ox-night-line:#292929;--ox-white:#f3f4f6;--ox-alert:#9ca3af;--ox-alert-soft:rgba(156,163,175,.1);
+  --ox-surface:#121316;--ox-surface-raised:#181a1f;--ox-surface-hover:rgba(255,255,255,.045);--ox-border-hover:rgba(255,255,255,.16);
+  color-scheme:dark;background:var(--ox-paper);color:var(--ox-ink)
+}
+#oracle-experience[data-theme="light"]{
+  --ox-paper:#fafaf9;--ox-paper-deep:#f1f1ef;--ox-ink:#18181b;--ox-muted:#71717a;--ox-faint:#a1a1aa;--ox-rule:#e4e4e7;
+  --ox-rust:#5e6ad2;--ox-rust-soft:rgba(94,106,210,.1);--ox-moss:#71717a;--ox-moss-soft:rgba(113,113,122,.1);
+  --ox-night:#f4f4f5;--ox-night-line:#e4e4e7;--ox-white:#18181b;--ox-alert:#71717a;--ox-alert-soft:#f4f4f5;
+  --ox-surface:#ffffff;--ox-surface-raised:#f5f5f5;--ox-surface-hover:rgba(24,24,27,.035);--ox-border-hover:rgba(24,24,27,.16);
+  color-scheme:light;background:var(--ox-paper);color:var(--ox-ink)
+}
+#oracle-experience .ox-shell{max-width:1280px;padding-right:clamp(20px,4vw,56px);padding-left:clamp(20px,4vw,56px)}
+#oracle-experience .ox-topbar{height:58px;gap:14px;border-bottom:1px solid var(--ox-rule);background:color-mix(in srgb,var(--ox-paper) 88%,transparent);backdrop-filter:blur(16px)}
+#oracle-experience .ox-wordmark{font-weight:650;letter-spacing:.025em;gap:8px}
+#oracle-experience .ox-wordmark i{font-size:8px;letter-spacing:.07em;font-style:normal}
+#oracle-experience .ox-sigil{color:var(--ox-rust)}
+#oracle-experience .ox-topmeta{font-size:8px;letter-spacing:.06em}
+#oracle-experience .ox-top-sep{color:var(--ox-rule)}
+#oracle-experience .ox-nav{height:44px;top:58px;gap:clamp(15px,2.3vw,30px);border-bottom:1px solid var(--ox-rule);background:color-mix(in srgb,var(--ox-paper) 90%,transparent);backdrop-filter:blur(16px)}
+#oracle-experience .ox-nav button{font-size:9px;letter-spacing:.055em;transition:color .18s ease}
+#oracle-experience .ox-nav button span{font-size:8px;margin-right:6px;color:var(--ox-faint)}
+#oracle-experience .ox-nav button[aria-current="page"]{color:var(--ox-ink)}
+#oracle-experience .ox-nav button[aria-current="page"]::after{height:1px;background:var(--ox-rust);animation:none}
+#oracle-experience .ox-view{animation:ox-arrive .42s cubic-bezier(.16,1,.3,1) both}
+@keyframes ox-arrive{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+#oracle-experience .ox-eyebrow{margin-top:24px;font-size:8px;letter-spacing:.11em;color:var(--ox-muted)}
+#oracle-experience .ox-hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(300px,.92fr);align-items:center;gap:clamp(28px,5vw,68px);position:relative;isolation:isolate;overflow:hidden;text-align:left;padding:50px 0 42px;border-bottom:1px solid var(--ox-rule)}
+#oracle-experience .ox-hero::before{content:"";position:absolute;z-index:-1;pointer-events:none;left:43%;top:-24%;width:min(800px,80%);height:390px;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(94,106,210,.12),transparent 68%);filter:none;animation:none}
+#oracle-experience .ox-hero::after{content:"";position:absolute;z-index:-1;pointer-events:none;inset:0;width:auto;height:auto;left:0;top:0;transform:none;background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:36px 36px;mask-image:radial-gradient(ellipse at 42% 36%,#000 0%,transparent 76%);filter:none;animation:none}
+#oracle-experience[data-theme="light"] .ox-hero::after{background-image:linear-gradient(rgba(24,24,27,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(24,24,27,.035) 1px,transparent 1px)}
+#oracle-experience[data-theme="dark"] .ox-topbar,#oracle-experience[data-theme="dark"] .ox-nav{background:color-mix(in srgb,#0a0a0a 90%,transparent);border-color:#1f1f1f}
+#oracle-experience[data-theme="dark"] .ox-wordmark,#oracle-experience[data-theme="dark"] .ox-footer>span:first-child{color:#f3f4f6}
+#oracle-experience[data-theme="dark"] .ox-nav button[aria-current="page"]{color:#f3f4f6}
+#oracle-experience[data-theme="dark"] .ox-nav button[aria-current="page"]::after{background:#5e6ad2}
+#oracle-experience[data-theme="dark"] .ox-hero::before{background:radial-gradient(ellipse at center,rgba(94,106,210,.12),transparent 68%)}
+#oracle-experience[data-theme="dark"] .ox-hero::after{inset:0;background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:36px 36px;mask-image:radial-gradient(ellipse at 42% 36%,#000 0%,transparent 76%)}
+#oracle-experience[data-theme="dark"] .ox-hero-aside{border-color:#1f1f1f;background:#121316;box-shadow:none}
+#oracle-experience[data-theme="dark"] .ox-hero-aside::after{display:none}
+#oracle-experience[data-theme="dark"] .ox-hero-aside .ox-position-title,#oracle-experience[data-theme="dark"] .ox-gate-line b{color:#f3f4f6}
+#oracle-experience[data-theme="dark"] .ox-hero-aside .ox-position-detail{color:#9ca3af}
+#oracle-experience[data-theme="dark"] .ox-preview-top,#oracle-experience[data-theme="dark"] .ox-gate-line{border-color:#1f1f1f;color:#9ca3af}
+#oracle-experience[data-theme="dark"] .ox-bottleneck,#oracle-experience[data-theme="dark"] .ox-move,#oracle-experience[data-theme="dark"] .ox-bottomstat,#oracle-experience[data-theme="dark"] .ox-inline-link{border-color:#1f1f1f;background:#121316;box-shadow:none;color:#f3f4f6}
+#oracle-experience[data-theme="dark"] .ox-bottleneck h2,#oracle-experience[data-theme="dark"] .ox-move h2,#oracle-experience[data-theme="dark"] .ox-move-facts dd,#oracle-experience[data-theme="dark"] .ox-move .ox-verdict-detail,#oracle-experience[data-theme="dark"] .ox-move .ox-verdict-detail strong,#oracle-experience[data-theme="dark"] .ox-move .ox-decision-output details,#oracle-experience[data-theme="dark"] .ox-move .ox-decision-output pre,#oracle-experience[data-theme="dark"] .ox-bottomstat b{color:#f3f4f6}
+#oracle-experience[data-theme="dark"] .ox-source-note,#oracle-experience[data-theme="dark"] .ox-task-state,#oracle-experience[data-theme="dark"] .ox-move-facts dt,#oracle-experience[data-theme="dark"] .ox-move .ox-section-index,#oracle-experience[data-theme="dark"] .ox-move .ox-text-button{color:#9ca3af}
+#oracle-experience[data-theme="dark"] .ox-move-facts,#oracle-experience[data-theme="dark"] .ox-move-facts>div,#oracle-experience[data-theme="dark"] .ox-move .ox-decision-output{border-color:#1f1f1f}
+#oracle-experience[data-theme="dark"] .ox-source-tag{border-color:#292929;background:transparent;color:#9ca3af}
+#oracle-experience[data-theme="dark"] .ox-primary,#oracle-experience[data-theme="dark"] .ox-token-row button,#oracle-experience[data-theme="dark"] .ox-apply{border-color:#5e6ad2;background:#5e6ad2;color:#fff}
+#oracle-experience[data-theme="dark"] .ox-primary:hover,#oracle-experience[data-theme="dark"] .ox-token-row button:hover,#oracle-experience[data-theme="dark"] .ox-apply:hover{border-color:#7180ef;background:#7180ef}
+#oracle-experience[data-theme="dark"] .ox-primary span{color:#fff}
+#oracle-experience[data-theme="dark"] .ox-lock-note,#oracle-experience[data-theme="dark"] .ox-lock-note.is-locked{border-color:#292929;border-left-color:#5e6ad2;background:#181a1f;color:#9ca3af}
+#oracle-experience[data-theme="dark"] .ox-ask{border-color:#1f1f1f;border-top-color:#5e6ad2;background:#121316}
+#oracle-experience[data-theme="dark"] .ox-ask textarea,#oracle-experience[data-theme="dark"] .ox-token input{border-color:#292929;background:#0a0a0a;color:#f3f4f6}
+#oracle-experience[data-theme="dark"] .ox-original-link,#oracle-experience[data-theme="dark"] .ox-theme-toggle{border-color:#1f1f1f;background:transparent;color:#9ca3af}
+#oracle-experience[data-theme="dark"] .ox-original-link:hover,#oracle-experience[data-theme="dark"] .ox-theme-toggle:hover{border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.045);color:#f3f4f6}
+#oracle-experience[data-theme="dark"] .ox-original-link span{color:#5e6ad2}
+#oracle-experience[data-theme="dark"] .ox-live-dot{background:#5e6ad2;box-shadow:0 0 0 3px rgba(94,106,210,.14)}
+#oracle-experience[data-theme="dark"] .ox-footer{border-color:#1f1f1f;color:#9ca3af}
+#oracle-experience[data-theme="dark"] .ox-footer button{color:#9ca3af}
+#oracle-experience[data-theme="dark"] .ox-campaign-columns,#oracle-experience[data-theme="dark"] .ox-mission-layout,#oracle-experience[data-theme="dark"] .ox-proof-ledger,#oracle-experience[data-theme="dark"] .ox-intel-state,#oracle-experience[data-theme="dark"] .ox-campaign-columns article+article,#oracle-experience[data-theme="dark"] .ox-proof-ledger>section+section,#oracle-experience[data-theme="dark"] .ox-mission-aside,#oracle-experience[data-theme="dark"] .ox-intel-copy{border-color:#1f1f1f}
+#oracle-experience[data-theme="dark"] .ox-ask textarea::placeholder,#oracle-experience[data-theme="dark"] .ox-token input::placeholder{color:#6b7280}
+#oracle-experience[data-theme="dark"] .ox-decision-output,#oracle-experience[data-theme="dark"] .ox-move .ox-decision-output,#oracle-experience[data-theme="dark"] .ox-decision-output details{border-color:#1f1f1f}
+#oracle-experience[data-theme="dark"] .ox-decision-output pre,#oracle-experience[data-theme="dark"] .ox-verdict-detail,#oracle-experience[data-theme="dark"] .ox-verdict-detail strong{color:#9ca3af}
+#oracle-experience .ox-hero-left{max-width:620px;margin:0;position:relative;z-index:1}
+#oracle-experience .ox-dayline{width:150px;min-height:92px;justify-content:flex-start;align-items:center;gap:8px;margin:0 0 20px;color:var(--ox-ink);font-family:var(--ox-sans);line-height:1}
+#oracle-experience .ox-day-dial{left:50px;top:50%;width:120px;opacity:.4;transform:translate(-50%,-50%)}
+#oracle-experience .ox-dial-track{stroke:var(--ox-rust);opacity:.26}
+#oracle-experience .ox-dial-tick{stroke:var(--ox-muted);opacity:.2}
+#oracle-experience .ox-dial-tick-major{opacity:.36}
+#oracle-experience .ox-dial-progress{stroke:var(--ox-rust);opacity:.72}
+#oracle-experience .ox-dial-orbit{stroke:var(--ox-rust);opacity:.24;animation:none}
+#oracle-experience .ox-dial-marker-halo{fill:var(--ox-rust);animation:none}
+#oracle-experience .ox-dial-marker{fill:var(--ox-rust);stroke:var(--ox-paper);filter:none}
+#oracle-experience #ox-dial-gradient stop{stop-color:#5e6ad2!important}
+#oracle-experience .ox-day-num{font:550 36px/1 var(--ox-sans);letter-spacing:-.055em;color:var(--ox-ink);animation:none}
+#oracle-experience .ox-day-total{padding:0;color:var(--ox-muted);font:450 9px/1.25 var(--ox-mono);letter-spacing:0}
+#oracle-experience .ox-day-total b{font-size:11px;color:var(--ox-ink)}
+#oracle-experience .ox-day-total small{margin-top:3px;font-size:7px;letter-spacing:.06em}
+#oracle-experience .ox-phase-label{margin:0 0 10px;color:var(--ox-muted);font:550 9px/1.4 var(--ox-mono);letter-spacing:.1em;animation:none}
+#oracle-experience .ox-hero h1{max-width:13ch;margin:0;color:var(--ox-ink)!important;background:none!important;background-image:none!important;background-clip:border-box!important;-webkit-background-clip:border-box!important;-webkit-text-fill-color:currentColor!important;font:550 clamp(52px,6.3vw,82px)/.94 var(--ox-sans);letter-spacing:-.065em;overflow-wrap:normal;animation:ox-arrive .6s .06s cubic-bezier(.16,1,.3,1) both}
+#oracle-experience .ox-campaign-name{max-width:45ch;margin:15px 0 0;color:var(--ox-muted);font:400 15px/1.55 var(--ox-sans);letter-spacing:-.01em;animation:none}
+#oracle-experience .ox-hero-actions{gap:8px;margin-top:23px}
+#oracle-experience .ox-hero-action-primary,#oracle-experience .ox-hero-action-secondary{min-height:39px;padding:0 13px;border-radius:8px;font:550 8px/1 var(--ox-mono);letter-spacing:.055em;transition:background-color .18s ease,border-color .18s ease,color .18s ease}
+#oracle-experience .ox-hero-action-primary{border:1px solid var(--ox-rust);background:var(--ox-rust);color:#fff;box-shadow:none}
+#oracle-experience .ox-hero-action-primary span{color:#fff}
+#oracle-experience .ox-hero-action-primary:hover{transform:none;border-color:#7180ef;background:#7180ef;box-shadow:none}
+#oracle-experience .ox-hero-action-secondary{border:1px solid var(--ox-rule);background:transparent;color:var(--ox-ink)}
+#oracle-experience .ox-hero-action-secondary:hover{transform:none;border-color:var(--ox-border-hover);background:var(--ox-surface-hover)}
+#oracle-experience .ox-hero-aside{display:flex;flex-direction:column;justify-content:center;gap:0;position:relative;z-index:1;max-width:none;min-height:250px;margin:0;padding:24px;border:1px solid var(--ox-rule);border-radius:14px;background:var(--ox-surface);box-shadow:none;animation:ox-arrive .6s .1s cubic-bezier(.16,1,.3,1) both}
+#oracle-experience .ox-hero-aside::before,#oracle-experience .ox-hero-aside::after{display:none}
+#oracle-experience .ox-preview-top{margin-bottom:24px;padding-bottom:12px;border-color:var(--ox-rule);color:var(--ox-muted);font-size:8px;letter-spacing:.1em}
+#oracle-experience .ox-preview-live{color:var(--ox-muted);font-size:8px}
+#oracle-experience .ox-preview-live i{background:var(--ox-rust);box-shadow:0 0 0 3px var(--ox-rust-soft);animation:none}
+#oracle-experience .ox-hero-aside .ox-label{font-size:8px;letter-spacing:.1em}
+#oracle-experience .ox-hero-aside .ox-position-title{margin:8px 0 6px;color:var(--ox-ink);font:550 clamp(22px,2.5vw,30px)/1.15 var(--ox-sans);letter-spacing:-.04em}
+#oracle-experience .ox-hero-aside .ox-position-detail{color:var(--ox-muted);font-size:11px}
+#oracle-experience .ox-gate-line{height:auto;align-items:flex-start;justify-content:flex-start;gap:6px;margin-top:22px;padding:14px 0 0;border:0;border-top:1px solid var(--ox-rule)}
+#oracle-experience .ox-gate-line b{color:var(--ox-ink);font:450 11px/1.5 var(--ox-sans)}
+#oracle-experience .ox-now-grid{grid-template-columns:minmax(210px,.62fr) minmax(0,1.38fr);gap:14px;padding:18px 0 22px;border:0;animation:ox-arrive .55s .14s cubic-bezier(.16,1,.3,1) both}
+#oracle-experience .ox-bottleneck,#oracle-experience .ox-move,#oracle-experience .ox-bottomstat,#oracle-experience .ox-inline-link{border:1px solid var(--ox-rule);border-radius:12px;background:var(--ox-surface);box-shadow:none}
+#oracle-experience .ox-bottleneck{min-height:170px;padding:21px}
+#oracle-experience .ox-section-index{gap:9px;color:var(--ox-muted);font-size:8px;letter-spacing:.09em}
+#oracle-experience .ox-section-index>span:first-child{color:var(--ox-rust)}
+#oracle-experience .ox-bottleneck h2{margin:18px 0 9px;color:var(--ox-ink);font:520 21px/1.26 var(--ox-sans);letter-spacing:-.035em}
+#oracle-experience .ox-source-note{color:var(--ox-muted);font-size:10px}
+#oracle-experience .ox-move{padding:23px 25px;overflow:hidden;color:var(--ox-ink)}
+#oracle-experience .ox-move::before{left:0;width:2px;border-radius:0;background:var(--ox-rust);animation:none}
+#oracle-experience .ox-move::after{display:none}
+#oracle-experience .ox-move .ox-section-index,#oracle-experience .ox-task-state{color:var(--ox-muted)}
+#oracle-experience .ox-source-tag{border:1px solid var(--ox-rule);border-radius:5px;background:transparent;color:var(--ox-muted);font-size:7px}
+#oracle-experience .ox-move h2{margin:18px 0 5px;color:var(--ox-ink);font:520 clamp(22px,2.4vw,30px)/1.2 var(--ox-sans);letter-spacing:-.04em}
+#oracle-experience .ox-task-state{font:450 8px/1.5 var(--ox-mono)}
+#oracle-experience .ox-move-facts,#oracle-experience .ox-move-facts>div{border-color:var(--ox-rule)}
+#oracle-experience .ox-move-facts{margin-top:18px}
+#oracle-experience .ox-move-facts>div{padding:9px 0}
+#oracle-experience .ox-move-facts dt{color:var(--ox-muted);font-size:7px}
+#oracle-experience .ox-move-facts dd{color:var(--ox-ink);font-size:10px}
+#oracle-experience .ox-move-actions{margin-top:16px}
+#oracle-experience .ox-primary,#oracle-experience .ox-token-row button,#oracle-experience .ox-apply{min-height:38px;border:1px solid var(--ox-rust);border-radius:7px;background:var(--ox-rust);color:#fff;padding:0 13px;font-size:8px;transition:background-color .18s ease,border-color .18s ease}
+#oracle-experience .ox-primary span{color:#fff}
+#oracle-experience .ox-primary:hover,#oracle-experience .ox-token-row button:hover,#oracle-experience .ox-apply:hover{transform:none;background:#7180ef;border-color:#7180ef;box-shadow:none}
+#oracle-experience .ox-move .ox-text-button{color:var(--ox-muted)}
+#oracle-experience .ox-bottomline{grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px;padding:2px 0 19px;border:0}
+#oracle-experience .ox-bottomstat{min-height:60px;gap:4px;padding:11px 13px;transition:border-color .18s ease,background-color .18s ease}
+#oracle-experience .ox-bottomstat:hover,#oracle-experience .ox-inline-link:hover{transform:none;border-color:var(--ox-border-hover);background:var(--ox-surface-hover);box-shadow:none}
+#oracle-experience .ox-bottomstat span{color:var(--ox-muted);font-size:7px}
+#oracle-experience .ox-bottomstat b{color:var(--ox-ink);font:520 13px/1.3 var(--ox-sans)}
+#oracle-experience .ox-inline-link{min-height:42px;padding:0 13px;color:var(--ox-ink);font-size:8px;transition:border-color .18s ease,background-color .18s ease}
+#oracle-experience .ox-inline-link span,#oracle-experience .ox-original-link span{color:var(--ox-rust)}
+#oracle-experience .ox-footer{min-height:52px;border-top:1px solid var(--ox-rule);border-color:var(--ox-rule);color:var(--ox-muted);font-size:8px}
+#oracle-experience .ox-footer>span:first-child{color:var(--ox-ink)}
+#oracle-experience .ox-footer button{color:var(--ox-muted);font-size:8px}
+#oracle-experience .ox-live-dot{background:var(--ox-rust);box-shadow:0 0 0 3px var(--ox-rust-soft);animation:none}
+#oracle-experience .ox-topbar,#oracle-experience .ox-nav{border-color:var(--ox-rule)}
+#oracle-experience .ox-original-link,#oracle-experience .ox-theme-toggle{min-height:32px;border:1px solid var(--ox-rule);border-radius:7px;background:transparent;color:var(--ox-muted);padding:0 9px;font-size:8px;transition:color .18s ease,border-color .18s ease,background-color .18s ease}
+#oracle-experience .ox-original-link:hover,#oracle-experience .ox-theme-toggle:hover{transform:none;border-color:var(--ox-border-hover);background:var(--ox-surface-hover);color:var(--ox-ink)}
+#oracle-experience .ox-theme-toggle>span:first-child{color:var(--ox-muted);font-size:14px}
+#oracle-experience .ox-page-heading{max-width:800px;padding:66px 0 32px}
+#oracle-experience .ox-page-heading h1,#oracle-experience .ox-campaign-columns h2,#oracle-experience .ox-campaign-next>b,#oracle-experience .ox-mission-primary h2,#oracle-experience .ox-mission-aside h3,#oracle-experience .ox-ledger-row strong,#oracle-experience .ox-intel-copy h2,#oracle-experience .ox-signal h2,#oracle-experience .ox-audit-head h2,#oracle-experience .ox-decision-output h3{color:var(--ox-ink);font-family:var(--ox-sans);font-weight:520;letter-spacing:-.04em}
+#oracle-experience .ox-page-heading h1{font-size:clamp(44px,6vw,76px);line-height:.98}
+#oracle-experience .ox-page-heading>p:last-child,#oracle-experience .ox-campaign-columns p,#oracle-experience .ox-ledger-list,#oracle-experience .ox-intel-copy>p:last-child,#oracle-experience .ox-signal-list,#oracle-experience .ox-caveat{color:var(--ox-muted)}
+#oracle-experience .ox-campaign-columns,#oracle-experience .ox-mission-layout,#oracle-experience .ox-proof-ledger,#oracle-experience .ox-intel-state,#oracle-experience .ox-campaign-columns article+article,#oracle-experience .ox-proof-ledger>section+section,#oracle-experience .ox-mission-aside,#oracle-experience .ox-intel-copy{border-color:var(--ox-rule)}
+#oracle-experience .ox-runway-bar{background:var(--ox-paper-deep)}
+#oracle-experience .ox-point{border-color:var(--ox-rust);background:var(--ox-paper)}
+#oracle-experience .ox-current-point .ox-point{background:var(--ox-rust);box-shadow:0 0 0 4px var(--ox-rust-soft)}
+#oracle-experience .ox-large-metric strong,#oracle-experience .ox-intel-stamp strong,#oracle-experience .ox-audit-meta b{color:var(--ox-ink)}
+#oracle-experience .ox-lock-note,#oracle-experience .ox-lock-note.is-locked{border:1px solid var(--ox-rule);border-left:2px solid var(--ox-rust);border-radius:7px;background:var(--ox-surface-raised);color:var(--ox-muted)}
+#oracle-experience .ox-label-verified,#oracle-experience .ox-label-claimed{color:var(--ox-muted)!important}
+#oracle-experience .ox-ask{border:1px solid var(--ox-rule);border-top:1px solid var(--ox-rust);border-radius:12px;background:var(--ox-surface);padding:20px}
+#oracle-experience .ox-ask textarea,#oracle-experience .ox-token input{border:1px solid var(--ox-rule);border-radius:7px;background:var(--ox-paper);color:var(--ox-ink)}
+#oracle-experience .ox-ask textarea:focus-visible,#oracle-experience .ox-token input:focus-visible{outline:2px solid var(--ox-rust);outline-offset:2px}
+#oracle-experience .ox-token{border-color:var(--ox-rule)}
+#oracle-experience .ox-token-row button{min-height:38px}
+#oracle-experience .ox-decision-output,#oracle-experience .ox-move .ox-decision-output,#oracle-experience .ox-decision-output details{border-color:var(--ox-rule)}
+#oracle-experience .ox-verdict,#oracle-experience .ox-verdict-accept,#oracle-experience .ox-verdict-modify,#oracle-experience .ox-verdict-reject,#oracle-experience .ox-verdict-need_info{color:var(--ox-muted)!important}
+#oracle-experience .ox-verdict-detail,#oracle-experience .ox-verdict-detail strong,#oracle-experience .ox-decision-output details,#oracle-experience .ox-decision-output pre{color:var(--ox-muted)}
+#oracle-experience .ox-audit-head,#oracle-experience .ox-audit-row{border-color:var(--ox-rule)}
+#oracle-experience button:focus-visible,#oracle-experience a:focus-visible,#oracle-experience input:focus-visible,#oracle-experience textarea:focus-visible{outline:2px solid var(--ox-rust);outline-offset:2px}
+#oracle-experience .ox-command-trigger{display:inline-flex;align-items:center;gap:8px;min-width:0;min-height:32px;padding:0 9px;border:1px solid var(--ox-rule);border-radius:7px;background:transparent;color:var(--ox-muted);font:450 10px/1 var(--ox-sans);letter-spacing:0;white-space:nowrap;transition:color .18s ease,border-color .18s ease,background-color .18s ease}
+#oracle-experience .ox-command-trigger svg,#oracle-experience .ox-command-search svg{width:14px;height:14px;flex:none;fill:none;stroke:currentColor;stroke-width:1.4}
+#oracle-experience .ox-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+#oracle-experience .ox-command-trigger:hover{border-color:var(--ox-border-hover);background:var(--ox-surface-hover);color:var(--ox-ink)}
+#oracle-experience kbd{display:inline-flex;align-items:center;justify-content:center;min-height:19px;padding:1px 5px;border:1px solid var(--ox-rule);border-radius:4px;background:var(--ox-surface-raised);color:var(--ox-muted);font:500 9px/1 var(--ox-mono);white-space:nowrap}
+#oracle-experience .ox-command-layer[hidden]{display:none!important}
+#oracle-experience .ox-command-layer{position:fixed;inset:0;z-index:10002;display:flex;align-items:flex-start;justify-content:center;padding:14vh 20px 24px}
+#oracle-experience .ox-command-scrim{position:absolute;inset:0;background:rgba(0,0,0,.58);backdrop-filter:blur(4px)}
+#oracle-experience .ox-command-dialog{position:relative;z-index:1;width:min(100%,600px);max-height:min(72vh,620px);overflow:auto;border:1px solid var(--ox-night-line);border-radius:12px;background:var(--ox-surface);color:var(--ox-ink);animation:ox-palette-in .18s cubic-bezier(.16,1,.3,1) both}
+@keyframes ox-palette-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+#oracle-experience .ox-command-search{height:54px;display:flex;align-items:center;gap:11px;padding:0 14px;border-bottom:1px solid var(--ox-rule);color:var(--ox-muted)}
+#oracle-experience .ox-command-search input{flex:1;min-width:0;border:0;outline:none!important;box-shadow:none!important;appearance:none;background:transparent;color:var(--ox-ink);font:400 14px/1.4 var(--ox-sans)}
+#oracle-experience .ox-command-search input::placeholder{color:var(--ox-faint)}
+#oracle-experience .ox-command-search>button{border:0;background:transparent;padding:4px;color:var(--ox-muted)}
+#oracle-experience .ox-command-group-label{padding:13px 14px 7px;color:var(--ox-faint);font:550 8px/1.4 var(--ox-mono);letter-spacing:.1em}
+#oracle-experience .ox-command-items{padding:0 7px 8px}
+#oracle-experience .ox-command-item{width:100%;min-height:52px;display:grid;grid-template-columns:26px minmax(0,1fr) auto;align-items:center;gap:9px;padding:7px 9px;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--ox-ink);text-align:left;font:400 12px/1.35 var(--ox-sans);transition:background-color .14s ease,border-color .14s ease}
+#oracle-experience .ox-command-item[hidden]{display:none!important}
+#oracle-experience .ox-command-item:hover,#oracle-experience .ox-command-item[aria-selected="true"]{border-color:color-mix(in srgb,var(--ox-rust) 45%,var(--ox-rule));background:color-mix(in srgb,var(--ox-rust) 9%,transparent)}
+#oracle-experience .ox-command-symbol{display:grid;place-items:center;width:24px;height:24px;border:1px solid var(--ox-rule);border-radius:6px;color:var(--ox-muted);font:12px/1 var(--ox-sans)}
+#oracle-experience .ox-command-item[aria-selected="true"] .ox-command-symbol{border-color:var(--ox-rust);color:var(--ox-rust)}
+#oracle-experience .ox-command-item b{display:block;font:520 12px/1.35 var(--ox-sans)}
+#oracle-experience .ox-command-item small{display:block;margin-top:2px;color:var(--ox-muted);font:400 10px/1.35 var(--ox-sans)}
+#oracle-experience .ox-command-footer{display:flex;align-items:center;gap:15px;padding:10px 14px;border-top:1px solid var(--ox-rule);color:var(--ox-muted);font:400 9px/1.3 var(--ox-sans)}
+#oracle-experience .ox-command-footer span{display:inline-flex;align-items:center;gap:4px}
+#oracle-return-to-experience{border:1px solid var(--ox-rule);border-radius:7px;background:var(--ox-surface);color:var(--ox-ink);box-shadow:none}
+@media(max-width:1000px){#oracle-experience .ox-wordmark i,#oracle-experience .ox-topmeta [data-f="source"]{display:none}#oracle-experience .ox-topbar{gap:10px}#oracle-experience .ox-topmeta{margin-left:auto}}
+@media(max-width:760px){#oracle-experience .ox-hero{grid-template-columns:1fr;gap:25px;padding:36px 0 30px;text-align:left}#oracle-experience .ox-hero-left{max-width:650px}#oracle-experience .ox-hero h1{max-width:14ch;font-size:clamp(50px,10vw,72px)}#oracle-experience .ox-hero-aside{min-height:0;padding:20px}#oracle-experience .ox-now-grid{grid-template-columns:1fr;gap:10px}#oracle-experience .ox-bottleneck{min-height:0}#oracle-experience .ox-bottomline{grid-template-columns:repeat(2,minmax(0,1fr))}#oracle-experience .ox-inline-link{grid-column:1/-1;justify-content:center}}
+@media(max-width:620px){#oracle-experience .ox-shell{padding-right:18px;padding-left:18px}#oracle-experience .ox-topbar{height:56px;gap:7px}#oracle-experience .ox-wordmark{gap:5px;font-size:10px}#oracle-experience .ox-sigil{font-size:18px}#oracle-experience .ox-command-trigger{width:31px;min-width:31px;justify-content:center;padding:0}#oracle-experience .ox-command-trigger-label,#oracle-experience .ox-command-trigger kbd{display:none}#oracle-experience .ox-topmeta{gap:5px;font-size:7px}#oracle-experience .ox-topmeta [data-f="source"],#oracle-experience .ox-top-sep{display:none}#oracle-experience .ox-theme-toggle{min-width:31px;min-height:31px;padding:0}#oracle-experience .ox-theme-toggle .ox-theme-label{display:none}#oracle-experience .ox-original-link{min-width:31px;min-height:31px;padding:0 8px;font-size:0}#oracle-experience .ox-original-link span{font-size:12px;margin:0}#oracle-experience .ox-nav{top:56px;height:42px;gap:18px;margin-right:-18px;padding-right:18px}#oracle-experience .ox-nav button{font-size:8px}#oracle-experience .ox-nav button span{display:none}#oracle-experience .ox-eyebrow{margin-top:20px;font-size:7px}#oracle-experience .ox-hero{padding:30px 0 25px;gap:20px}#oracle-experience .ox-dayline{min-height:78px;margin-bottom:14px}#oracle-experience .ox-day-dial{width:104px}#oracle-experience .ox-day-num{font-size:31px}#oracle-experience .ox-hero h1{font-size:clamp(45px,12vw,62px);line-height:.98}#oracle-experience .ox-campaign-name{font-size:13px}#oracle-experience .ox-hero-actions{margin-top:18px}#oracle-experience .ox-hero-action-primary,#oracle-experience .ox-hero-action-secondary{min-height:37px;padding:0 10px;font-size:7px}#oracle-experience .ox-hero-aside{padding:17px;border-radius:11px}#oracle-experience .ox-preview-top{margin-bottom:17px}#oracle-experience .ox-gate-line{margin-top:16px;padding-top:12px}#oracle-experience .ox-now-grid{padding-top:11px}#oracle-experience .ox-bottleneck{padding:17px}#oracle-experience .ox-move{padding:18px 16px}#oracle-experience .ox-bottomline{gap:8px}#oracle-experience .ox-bottomstat{padding:10px;border-radius:9px}#oracle-experience .ox-footer{gap:5px;padding:12px 0 16px}#oracle-experience .ox-page-heading{padding:45px 0 27px}#oracle-experience .ox-page-heading h1{font-size:clamp(40px,12vw,58px)}#oracle-experience .ox-command-layer{padding:9vh 12px 18px}#oracle-experience .ox-command-dialog{max-height:80vh;border-radius:10px}#oracle-experience .ox-command-search{height:50px;padding:0 12px}#oracle-experience .ox-command-item{min-height:49px}#oracle-experience .ox-command-footer{justify-content:space-between;gap:6px;padding:9px 10px;font-size:8px}}
+@media(max-width:370px){#oracle-experience .ox-wordmark{font-size:9px}#oracle-experience .ox-topbar{gap:5px}#oracle-experience .ox-topmeta{font-size:6px}}
+@media(prefers-reduced-motion:reduce){#oracle-experience *,#oracle-return-to-experience{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
